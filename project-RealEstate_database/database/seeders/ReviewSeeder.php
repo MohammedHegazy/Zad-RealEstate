@@ -17,9 +17,9 @@ class ReviewSeeder extends Seeder
     public function run(): void
     {
         $buyer = User::query()->where('email', 'buyer@realestate.test')->first();
-        $company = Companies::query()->where('company_name', 'Acme Realty')->first();
+        $company = Companies::query()->where('company_name', 'أكاديمية العقارية')->first();
         $agent = Agent::query()->whereHas('user', fn ($q) => $q->where('email', 'agent@realestate.test'))->first();
-        $estate = Estate::query()->where('name', 'Sunlit Mazzeh Apartment')->first();
+        $estate = Estate::query()->where('name', 'like', 'شقة المزة%')->first();
 
         if (! $buyer) {
             $this->command?->warn('ReviewSeeder skipped: demo buyer not found.');

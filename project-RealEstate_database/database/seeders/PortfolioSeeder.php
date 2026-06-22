@@ -24,8 +24,8 @@ class PortfolioSeeder extends Seeder
             return;
         }
 
-        $damascus = Cities::query()->where('name', 'Damascus')->first();
-        $malki = Places::query()->where('name', 'Malki')->first();
+        $damascus = Cities::query()->where('name', 'دمشق')->first();
+        $malki = Places::query()->where('name', 'المالكي')->first();
 
         UserPreference::query()->updateOrCreate(
             ['user_id' => $buyer->id],
@@ -57,7 +57,7 @@ class PortfolioSeeder extends Seeder
             ],
         );
 
-        $estate = Estate::query()->where('name', 'Sunlit Mazzeh Apartment')->first();
+        $estate = Estate::query()->where('name', 'like', 'شقة المزة%')->first();
 
         if ($estate) {
             PortfolioProperty::query()->updateOrCreate(

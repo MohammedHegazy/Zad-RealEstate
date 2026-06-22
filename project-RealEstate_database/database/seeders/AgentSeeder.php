@@ -11,29 +11,37 @@ class AgentSeeder extends Seeder
 {
     public function run(): void
     {
-        $agentUser = User::query()->where('email', 'agent@realestate.test')->first();
-        $company = Companies::query()->where('company_name', 'Acme Realty')->first();
+        $agentUsers = User::query()->where('type', 'agent')->orderBy('id')->get();
+        $companies = Companies::query()->orderBy('id')->get();
 
-        if (! $agentUser || ! $company) {
-            $this->command?->warn('AgentSeeder skipped: demo agent user or company not found.');
-
+        if ($agentUsers->isEmpty() || $companies->isEmpty()) {
+            $this->command?->warn('AgentSeeder skipped: agent users or companies not found.');
             return;
         }
 
-        Agent::query()->updateOrCreate(
-            ['user_id' => $agentUser->id],
-            [
-                'companies_id' => $company->id,
-                'profile_image' => null,
-                'views' => 24,
-                'shares' => 3,
-                'trust_score' => 0,
-            ],
-        );
+        $perCompany = $companies->count();
 
-        $agentUser->socialLinks()->updateOrCreate(
-            ['platform' => 'linkedin'],
-            ['url' => 'https://linkedin.com/in/rami-saleh-agent'],
-        );
+        foreach ($agentUsers as $i => $user) {
+            $company = $companies->get($i % $perCompany);
+
+            Agent::query()->updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'companies_id' => $company->id,
+                    'profile_image' => null,
+                    'views' => fake()->numberBetween(5, 200),
+                    'shares' => fake()->numberBetween(0, 30),
+                    'trust_score' => 0,
+                ],
+            );
+
+            // Add social link for each agent
+            if ($i === 0) {
+                $user->socialLinks()->updateOrCreate(
+                    ['platform' => 'linkedin'],
+                    ['url' => 'https://linkedin.com/in/rami-saleh-agent'],
+                );
+            }
+        }
     }
 }

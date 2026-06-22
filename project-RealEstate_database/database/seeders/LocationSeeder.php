@@ -10,42 +10,163 @@ class LocationSeeder extends Seeder
 {
     public function run(): void
     {
-        $damascus = Cities::query()->updateOrCreate(
-            ['name' => 'Damascus'],
+        // Clear existing data to avoid duplicates when reseeding
+        Places::query()->delete();
+        Cities::query()->delete();
+
+        $cities = [
             [
-                'image' => null,
+                'name' => 'دمشق',
                 'latitude' => 33.5138,
                 'longitude' => 36.2765,
+                'places' => [
+                    'المالكي', 'المزة', 'أبو رمانة', 'الشعلان', 'الروضة',
+                    'المهاجرين', 'القدم', 'باب توما', 'القصاع', 'ركن الدين',
+                ],
             ],
-        );
-
-        $aleppo = Cities::query()->updateOrCreate(
-            ['name' => 'Aleppo'],
             [
-                'image' => null,
+                'name' => 'حلب',
                 'latitude' => 36.2021,
                 'longitude' => 37.1343,
+                'places' => [
+                    'العزيزية', 'الحمدانية', 'الجميلية', 'الميدان', 'بستان الباشا',
+                    'السريان', 'الفرافرة', 'الكلاسة', 'العقبة', 'باب النيرب',
+                ],
             ],
-        );
-
-        $places = [
-            ['city' => $damascus, 'name' => 'Malki', 'latitude' => 33.5140, 'longitude' => 36.2770],
-            ['city' => $damascus, 'name' => 'Mazzeh', 'latitude' => 33.5200, 'longitude' => 36.2800],
-            ['city' => $damascus, 'name' => 'Abu Rummaneh', 'latitude' => 33.5085, 'longitude' => 36.2710],
-            ['city' => $aleppo, 'name' => 'Aziziyah', 'latitude' => 36.1980, 'longitude' => 37.1520],
+            [
+                'name' => 'حمص',
+                'latitude' => 34.7250,
+                'longitude' => 36.7167,
+                'places' => [
+                    'الوعر', 'الخالدية', 'المحطة', 'الإنشاءات', 'كرم الزيتون',
+                    'الزهراء', 'عكرمة', 'جورة الشياح', 'السبيل', 'دير بعلبة',
+                ],
+            ],
+            [
+                'name' => 'اللاذقية',
+                'latitude' => 35.5167,
+                'longitude' => 35.7833,
+                'places' => [
+                    'الرمل الجنوبي', 'الرمل الشمالي', 'الصليبة', 'دوير النسر', 'عين التينة',
+                    'القبة', 'بستان الباشا', 'البحيرة', 'الزراعة', 'كرايم',
+                ],
+            ],
+            [
+                'name' => 'حماة',
+                'latitude' => 35.1333,
+                'longitude' => 36.7500,
+                'places' => [
+                    'الشيخ عيد', 'المخيم', 'الحاضر', 'كفرات', 'الجامعة',
+                    'العباسيين', 'المناخ', 'بصيرين', 'الجاجية', 'البرناوي',
+                ],
+            ],
+            [
+                'name' => 'الرقة',
+                'latitude' => 35.9500,
+                'longitude' => 39.0167,
+                'places' => [
+                    'الرقة القديمة', 'المشلب', 'البيادر', 'حزيمة', 'المنصور',
+                    'العديسات', 'السبخة', 'الكسرة', 'الباسل', 'خلفان',
+                ],
+            ],
+            [
+                'name' => 'دير الزور',
+                'latitude' => 35.3333,
+                'longitude' => 40.1500,
+                'places' => [
+                    'القصور', 'الجبيلة', 'الباسل', 'الرشدية', 'المياذين',
+                    'عرق', 'بني سمية', 'الصور', 'بقرص', 'طويلة',
+                ],
+            ],
+            [
+                'name' => 'الحسكة',
+                'latitude' => 36.5000,
+                'longitude' => 40.7500,
+                'places' => [
+                    'غويران', 'الشدادي', 'اليعربية', 'عامودا', 'الدرباسية',
+                    'رأس العين', 'القامشلي', 'تل حميس', 'الأسود', 'الهول',
+                ],
+            ],
+            [
+                'name' => 'درعا',
+                'latitude' => 32.6167,
+                'longitude' => 36.1000,
+                'places' => [
+                    'درعا المحطة', 'الحي الشرقي', 'الحي الجنوبي', 'طيبة', 'خان أرنبة',
+                    'جاسم', 'نوى', 'الشيخ مسكين', 'الحراك', 'بصرى',
+                ],
+            ],
+            [
+                'name' => 'السويداء',
+                'latitude' => 32.7000,
+                'longitude' => 36.5667,
+                'places' => [
+                    'شهبا', 'صلخد', 'قنوات', 'المزرعة', 'عتنى',
+                    'كفر اللحف', 'ذهبان', 'أم الزيتون', 'الثعلة', 'بصير',
+                ],
+            ],
+            [
+                'name' => 'طرطوس',
+                'latitude' => 34.8833,
+                'longitude' => 35.8833,
+                'places' => [
+                    'ميناء طرطوس', 'القدموس', 'صافيتا', 'بانياس', 'الشيخ بدر',
+                    'الدريكيش', 'الحميدية', 'المشتى', 'الكفرون', 'الرويسة',
+                ],
+            ],
+            [
+                'name' => 'إدلب',
+                'latitude' => 35.9333,
+                'longitude' => 36.6333,
+                'places' => [
+                    'معرة النعمان', 'سراقب', 'جسر الشغور', 'أريحا', 'خان شيخون',
+                    'بينش', 'الدانا', 'كفر تخاريم', 'حارم', 'سنجار',
+                ],
+            ],
+            [
+                'name' => 'القنيطرة',
+                'latitude' => 33.1167,
+                'longitude' => 35.8167,
+                'places' => [
+                    'القنيطرة القديمة', 'الجولان', 'مسعدة', 'بقعاثا', 'الرفيد',
+                    'الصمدانية', 'الحرية', 'الخشنية', 'السويسة', 'الصمدين',
+                ],
+            ],
+            [
+                'name' => 'ريف دمشق',
+                'latitude' => 33.5000,
+                'longitude' => 36.2833,
+                'places' => [
+                    'دوما', 'حرستا', 'جرمانا', 'قطنا', 'التل',
+                    'الزبداني', 'يبرود', 'النبك', 'صحنايا', 'عربين',
+                ],
+            ],
         ];
 
-        foreach ($places as $place) {
-            Places::query()->updateOrCreate(
-                [
-                    'cities_id' => $place['city']->id,
-                    'name' => $place['name'],
-                ],
-                [
-                    'latitude' => $place['latitude'],
-                    'longitude' => $place['longitude'],
-                ],
+        foreach ($cities as $cityData) {
+            $places = $cityData['places'];
+            unset($cityData['places']);
+
+            $city = Cities::query()->updateOrCreate(
+                ['name' => $cityData['name']],
+                $cityData,
             );
+
+            foreach ($places as $i => $placeName) {
+                $offsetLat = ($i - 4.5) * 0.008;
+                $offsetLng = ($i % 3 - 1) * 0.008;
+
+                Places::query()->updateOrCreate(
+                    [
+                        'cities_id' => $city->id,
+                        'name' => $placeName,
+                    ],
+                    [
+                        'latitude' => $cityData['latitude'] + $offsetLat,
+                        'longitude' => $cityData['longitude'] + $offsetLng,
+                    ],
+                );
+            }
         }
     }
 }
