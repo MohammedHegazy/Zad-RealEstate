@@ -69,6 +69,7 @@
   /* -------------------------------------------------------------------------
    * Semantic — Surfaces & backgrounds
    * ------------------------------------------------------------------------- */
+  --color-white: var(--white);
   --color-background: var(--white);
   --color-background-muted: var(--navy-50);
   --color-background-inverse: var(--navy-900);

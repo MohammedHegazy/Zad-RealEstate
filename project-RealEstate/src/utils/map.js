@@ -9,7 +9,14 @@ export function hasMapCoordinates(item) {
   const lat = Number(item?.latitude)
   const lng = Number(item?.longitude)
 
-  return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
+  return (
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    Math.abs(lat) >= 0.01 &&
+    Math.abs(lng) >= 0.01 &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180
+  )
 }
 
 export function formatCoordinates(latitude, longitude) {

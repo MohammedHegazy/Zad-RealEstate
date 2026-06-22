@@ -216,10 +216,10 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  border: 2px solid var(--color-border);
+  border: 2px solid var(--color-white);
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-whtie);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   transition:
@@ -631,7 +631,7 @@
   padding: 1.5rem;
   border-radius: 0.875rem;
   background: var(--color-card-dark-accent-bg);
-  color: var(--color-text-primary);
+  color: var(--color-white);
 }
 
 .estate-sidebar__price {
@@ -639,6 +639,7 @@
   font-family: var(--font-family-price);
   font-size: var(--text-3xl);
   font-weight: var(--font-weight-bold);
+  color: var(--color-white);
 }
 
 .estate-sidebar__location {
@@ -646,7 +647,7 @@
   align-items: center;
   gap: 0.35rem;
   margin: 0;
-  color: var(--color-text-secondary);
+  color: var(--color-text-inverse-secondary);
   font-size: var(--text-sm);
 }
 

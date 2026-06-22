@@ -10,13 +10,11 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import SectionHeader from '@/components/ui/SectionHeader.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 import { useHomePage } from '@/composables/useHomePage.js'
-import { formatPrice, formatPropertyType } from '@/composables/useFormatters.js'
-import { getEstateImage, getEstateLocation } from '@/utils/estate.js'
+
 
 const {
   loading,
   error,
-  featuredEstate,
   latestEstates,
   cities,
   places,
@@ -36,7 +34,7 @@ onMounted(fetchHomeData)
       <div class="homepage-hero__bg"></div>
       <div class="container homepage-hero__content">
         <div class="row align-items-center g-5">
-          <div class="col-lg-7">
+          <div class="col-lg-12">
             <span class="homepage-hero__overline text-overline">منصة عقارية ذكية</span>
             <h1 class="homepage-hero__title">اعثر على عقارك المثالي اين ما تريد</h1>
             <p class="homepage-hero__subtitle">
@@ -58,31 +56,6 @@ onMounted(fetchHomeData)
                 <span>وسيط معتمد</span>
               </div>
             </div>
-          </div>
-
-          <div v-if="featuredEstate" class="col-lg-5">
-            <article class="homepage-hero__featured">
-              <img
-                :src="getEstateImage(featuredEstate)"
-                :alt="featuredEstate.name"
-                class="homepage-hero__featured-img"
-              />
-              <div class="homepage-hero__featured-body">
-                <span class="homepage-hero__featured-badge">عقار مميز</span>
-                <h3>{{ featuredEstate.name }}</h3>
-                <p>
-                  <i class="bi bi-geo-alt"></i>
-                  {{ getEstateLocation(featuredEstate) }}
-                </p>
-                <div class="homepage-hero__featured-meta">
-                  <span>{{ formatPropertyType(featuredEstate.kind_text) }}</span>
-                  <strong>{{ formatPrice(featuredEstate.price) }}</strong>
-                </div>
-                <AppButton :to="`/estates/${featuredEstate.id}`" variant="primary" size="sm">
-                  عرض التفاصيل
-                </AppButton>
-              </div>
-            </article>
           </div>
         </div>
 

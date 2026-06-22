@@ -13,17 +13,25 @@
 }
 
 .directory-toolbar__search {
-  flex: 1 1 220px;
+  flex: 2 1 200px;
+  min-width: 140px;
 }
 
 .directory-toolbar__filters {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
+  flex: 3 1 auto;
 }
 
 .directory-toolbar__filters .app-select-wrap {
-  min-width: 10rem;
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+.directory-toolbar__clear {
+  flex-shrink: 0;
 }
 
 .agents-page__meta {

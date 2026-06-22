@@ -1,7 +1,7 @@
 /* Table row actions */
 .table-action-group {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.35rem;
 }
@@ -21,9 +21,9 @@
   gap: 0.35rem;
   min-height: 2rem;
   padding: 0.3rem 0.65rem;
-  border: 1px solid transparent;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 0.5rem;
-  background-color: transparent;
+  background-color: var(--color-surface);
   color: var(--color-text-secondary);
   font-family: var(--font-family-button);
   font-size: var(--text-xs);
@@ -33,16 +33,17 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.15s ease;
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
 }
 
 .table-action__icon {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .table-action__label {
@@ -51,27 +52,29 @@
 
 .table-action:hover {
   text-decoration: none;
+  border-color: transparent;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .table-action:focus-visible {
   outline: 2px solid var(--color-border-focus);
-  outline-offset: 2px;
+  outline-offset: 1px;
 }
 
 .table-action:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .table-action:not(:disabled):active {
-  transform: scale(0.97);
+  transform: scale(0.95);
 }
 
 .table-action--divider {
   position: relative;
-  margin-inline-start: 0.15rem;
-  padding-inline-start: 0.75rem;
+  margin-inline-start: 0.35rem;
+  padding-inline-start: 0.65rem;
 }
 
 .table-action--divider::before {
@@ -85,67 +88,75 @@
   transform: translateY(-50%);
 }
 
+/* ── Tone Variants ── */
+
 .table-action--view {
-  background-color: var(--color-background-muted);
   color: var(--color-text-secondary);
+  border-color: var(--color-border-subtle);
 }
 
 .table-action--view:hover {
   background-color: var(--color-info-bg);
+  border-color: var(--color-info);
   color: var(--color-info);
 }
 
 .table-action--success {
-  background-color: var(--color-success-bg);
   color: var(--color-success);
+  border-color: var(--color-success);
+  background-color: var(--color-success-bg);
 }
 
 .table-action--success:hover {
-  background-color: var(--color-success-bg);
-  color: var(--color-success);
+  background-color: #d4ede1;
+  color: #0d6b40;
 }
 
 .table-action--warning {
-  background-color: var(--color-warning-bg);
   color: var(--color-warning);
+  border-color: var(--color-warning);
+  background-color: var(--color-warning-bg);
 }
 
 .table-action--warning:hover {
-  background-color: var(--color-warning-bg);
-  color: var(--color-warning);
+  background-color: #fde8ce;
+  color: #92400e;
 }
 
 .table-action--reject {
-  background-color: var(--color-surface);
-  border-color: var(--color-border-strong);
   color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
 }
 
 .table-action--reject:hover {
-  border-color: var(--color-warning);
   background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
   color: var(--color-warning);
 }
 
 .table-action--danger {
-  background-color: transparent;
   color: var(--color-error);
+  border-color: rgba(185, 28, 28, 0.25);
+  background-color: var(--color-error-bg);
 }
 
 .table-action--danger:hover {
-  background-color: var(--color-error-bg);
-  color: var(--color-error);
+  background-color: #f8d6d6;
+  color: #991b1b;
 }
 
 .table-action--neutral {
-  background-color: var(--color-background-muted);
   color: var(--color-text-secondary);
+  border-color: var(--color-border-subtle);
 }
 
 .table-action--neutral:hover {
   background-color: var(--color-hover-overlay);
+  border-color: var(--color-border-strong);
   color: var(--color-text-primary);
 }
+
+/* ── Compact Mobile ── */
 
 @media (max-width: 767.98px) {
   .table-action-group--compact-mobile .table-action__label {
@@ -161,7 +172,8 @@
   }
 
   .table-action-group--compact-mobile .table-action {
-    padding: 0.4rem;
+    padding: 0.35rem;
     min-width: 2rem;
+    min-height: 2rem;
   }
 }

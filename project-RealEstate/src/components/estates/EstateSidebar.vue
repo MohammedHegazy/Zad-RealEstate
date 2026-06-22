@@ -137,7 +137,7 @@ function handleShare() {
   padding: 0.25rem 0.4rem;
   border: none;
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--color-white) !important;
   font-size: 0.85rem;
 }
 

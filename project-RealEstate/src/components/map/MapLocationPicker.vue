@@ -44,10 +44,7 @@ let pickerMarker = null
 let mapReady = false
 
 const hasSelection = computed(() => {
-  const lat = Number(props.latitude)
-  const lng = Number(props.longitude)
-
-  return Number.isFinite(lat) && Number.isFinite(lng)
+  return hasMapCoordinates({ latitude: props.latitude, longitude: props.longitude })
 })
 
 const coordinatesLabel = computed(() => {

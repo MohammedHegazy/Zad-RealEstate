@@ -10,7 +10,7 @@
   --field-bg: var(--color-surface);
   --field-bg-muted: var(--color-background-muted);
   --field-bg-focus: var(--white);
-  --field-color: var(--black-900);
+  --field-color: var(--color-primary-text);
   --field-placeholder: var(--color-text-muted);
   --field-focus-ring: 0 0 0 3px var(--color-focus-ring);
   --field-error-border: var(--color-error);
@@ -421,7 +421,7 @@
 .field-control:focus {
   outline: none;
   border-color: var(--field-border-focus);
-  background-color: var(--field-bg-focus);
+  /* background-color: var(--field-bg-focus); */
   box-shadow: var(--field-focus-ring);
 }
 

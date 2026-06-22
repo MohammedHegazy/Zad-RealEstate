@@ -3,7 +3,6 @@ defineProps({
   columns: {
     type: Array,
     required: true,
-    // { key, label, class? }
   },
   rows: {
     type: Array,
@@ -17,7 +16,17 @@ defineProps({
     type: String,
     default: 'لا توجد بيانات.',
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  skeletonRows: {
+    type: Number,
+    default: 5,
+  },
 })
+
+const SKELETON_COLS = ['50', '70', '40', '55', '45', '60']
 </script>
 
 <template>
@@ -32,9 +41,21 @@ defineProps({
         </tr>
       </thead>
       <tbody>
-        <tr v-if="!rows.length">
+        <tr v-if="loading">
+          <td
+            v-for="(w, i) in SKELETON_COLS.slice(0, columns.length + ($slots.actions ? 1 : 0))"
+            :key="i"
+            class="admin-table__skeleton"
+          >
+            <div class="admin-table__skeleton-bar" :style="{ width: w + '%' }" />
+          </td>
+        </tr>
+        <tr v-else-if="!rows.length">
           <td :colspan="columns.length + ($slots.actions ? 1 : 0)" class="admin-table__empty">
-            {{ emptyMessage }}
+            <div class="admin-table__empty-icon">
+              <i class="bi bi-inbox"></i>
+            </div>
+            <p>{{ emptyMessage }}</p>
           </td>
         </tr>
         <tr v-for="row in rows" :key="row[rowKey]">

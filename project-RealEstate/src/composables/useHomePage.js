@@ -6,7 +6,6 @@ export function useHomePage() {
   const loading = ref(true)
   const error = ref(null)
 
-  const featuredEstate = ref(null)
   const latestEstates = ref([])
   const cities = ref([])
   const places = ref([])
@@ -30,7 +29,6 @@ export function useHomePage() {
         ])
 
       latestEstates.value = estatesRes.data ?? []
-      featuredEstate.value = latestEstates.value[0] ?? null
       cities.value = citiesRes.data ?? []
       places.value = [...(placesRes.data ?? [])].sort(
         (a, b) => (b.active_estates_count ?? 0) - (a.active_estates_count ?? 0),
@@ -56,7 +54,6 @@ export function useHomePage() {
   return {
     loading,
     error,
-    featuredEstate,
     latestEstates,
     cities,
     places,

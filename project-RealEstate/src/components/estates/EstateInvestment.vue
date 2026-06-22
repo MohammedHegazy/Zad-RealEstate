@@ -144,7 +144,7 @@ const hasMetrics = computed(() => metrics.value.length > 0)
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   background: var(--color-card-dark-accent-bg);
-  color: var(--color-text-primary);
+  color: var(--color-white);
   border-radius: 0.75rem;
   font-weight: 600;
   font-size: var(--text-sm);
@@ -160,7 +160,6 @@ const hasMetrics = computed(() => metrics.value.length > 0)
   filter: brightness(1.08);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px var(--color-focus-ring);
-  color: var(--color-text-primary);
 }
 
 .estate-investment__cta i:first-child {
