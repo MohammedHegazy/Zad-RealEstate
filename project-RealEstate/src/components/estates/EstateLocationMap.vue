@@ -41,7 +41,7 @@ const mapSearchLink = computed(() => {
 </script>
 
 <template>
-  <section v-if="hasCoordinates" class="estate-location-map">
+  <section v-if="hasCoordinates" id="map" class="estate-location-map">
     <div class="estate-location-map__header">
       <h2>
         <i class="bi bi-geo-alt-fill"></i>

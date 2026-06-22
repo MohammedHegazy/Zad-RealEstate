@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  iconOnly: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const auth = useAuthStore()
@@ -73,6 +77,6 @@ onMounted(checkFavorite)
     @click="toggleFavorite"
   >
     <i :class="favorited ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
-    <span>{{ favorited ? 'في المفضلة' : 'أضف للمفضلة' }}</span>
+    <span v-if="!iconOnly">{{ favorited ? 'في المفضلة' : 'أضف للمفضلة' }}</span>
   </button>
 </template>

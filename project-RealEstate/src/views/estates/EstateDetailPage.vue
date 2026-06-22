@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, watch } from 'vue'
+import { nextTick, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import EstateGallery from '@/components/estates/EstateGallery.vue'
@@ -69,6 +69,30 @@ watch(
   () => route.params.id,
   (id) => {
     if (id) loadEstate(id)
+  },
+)
+
+watch(
+  () => estate.value,
+  (val) => {
+    if (val && route.hash) {
+      nextTick(() => {
+        const el = document.querySelector(route.hash)
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      })
+    }
+  },
+)
+
+watch(
+  () => route.hash,
+  (hash) => {
+    if (estate.value && hash) {
+      nextTick(() => {
+        const el = document.querySelector(hash)
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      })
+    }
   },
 )
 </script>

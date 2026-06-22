@@ -64,7 +64,7 @@ async function fetchPrediction() {
 </script>
 
 <template>
-  <section class="estate-price-prediction">
+  <section id="price-prediction" class="estate-price-prediction">
     <div class="estate-price-prediction__header">
       <h3 class="estate-price-prediction__title">
         <i class="bi bi-robot"></i>
