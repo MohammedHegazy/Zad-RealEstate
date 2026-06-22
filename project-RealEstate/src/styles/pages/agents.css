@@ -30,6 +30,28 @@
   min-width: 0;
 }
 
+.filter-wrap {
+  position: relative;
+  flex: 1 1 130px;
+  min-width: 0;
+}
+
+.filter-wrap .app-select__trigger {
+  padding-inline-start: 2rem;
+}
+
+.filter-wrap__icon {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .directory-toolbar__clear {
   flex-shrink: 0;
 }

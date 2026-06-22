@@ -69,17 +69,26 @@ function handleSearch() {
 
     <div class="hero-search__field">
       <label class="hero-search__label" for="hero-city">المدينة</label>
-      <AppSelect id="hero-city" v-model="cityId" size="lg" :options="cityOptions" />
+      <div class="hero-search__input-wrap">
+        <i class="bi bi-geo-alt hero-search__input-icon"></i>
+        <AppSelect id="hero-city" v-model="cityId" size="lg" :options="cityOptions" />
+      </div>
     </div>
 
     <div class="hero-search__field">
       <label class="hero-search__label" for="hero-type">النوع</label>
-      <AppSelect id="hero-type" v-model="typeText" size="lg" :options="propertyTypes" />
+      <div class="hero-search__input-wrap">
+        <i class="bi bi-building hero-search__input-icon"></i>
+        <AppSelect id="hero-type" v-model="typeText" size="lg" :options="propertyTypes" />
+      </div>
     </div>
 
     <div class="hero-search__field">
       <label class="hero-search__label" for="hero-listing">الغرض</label>
-      <AppSelect id="hero-listing" v-model="listingType" size="lg" :options="listingTypes" />
+      <div class="hero-search__input-wrap">
+        <i class="bi bi-tag hero-search__input-icon"></i>
+        <AppSelect id="hero-listing" v-model="listingType" size="lg" :options="listingTypes" />
+      </div>
     </div>
 
     <AppButton type="submit" variant="primary" size="lg" class="hero-search__submit">

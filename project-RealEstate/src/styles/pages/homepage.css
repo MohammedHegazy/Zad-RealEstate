@@ -102,6 +102,26 @@
   font-weight: var(--font-weight-semibold);
 }
 
+.hero-search__input-wrap {
+  position: relative;
+}
+
+.hero-search__input-icon {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.hero-search__input-wrap .app-select__trigger {
+  padding-inline-start: 2.2rem;
+}
+
 .hero-search .app-search-input,
 .hero-search .app-select-wrap {
   width: 100%;

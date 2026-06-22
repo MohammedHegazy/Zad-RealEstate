@@ -279,7 +279,8 @@ onUnmounted(() => {
 
 .inbox__search-input {
   width: 100%;
-  padding: 0.7rem 1rem 0.7rem 2.5rem;
+  padding: 0.7rem 1rem;
+  padding-inline-start: 2.5rem;
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   background: var(--color-surface);

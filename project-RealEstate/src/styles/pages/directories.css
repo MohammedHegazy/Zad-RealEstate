@@ -1,7 +1,7 @@
 /* Journey intro */
 .page-intro {
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
@@ -9,7 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .page-intro__journey-step {
@@ -35,9 +35,18 @@
 }
 
 .page-intro__title {
-  margin: 0 0 0.75rem;
-  font-size: var(--text-4xl);
+  margin: 0 0 0.5rem;
+  font-size: var(--text-3xl);
   line-height: var(--leading-tight);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.page-intro__title-icon {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .page-intro__description {
@@ -70,19 +79,19 @@
   padding: 2rem;
   border-radius: 1rem;
   background: var(--color-card-dark-accent-bg);
-  color: var(--color-text-primary);
+  color: var(--white);
 }
 
 .cta-banner__title {
   margin: 0 0 0.5rem;
   font-size: var(--text-2xl);
-  color: var(--color-text-secondary);
+  color: var(--white);
 }
 
 .cta-banner__description {
   margin: 0;
   max-width: 32rem;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.75);
   line-height: var(--leading-relaxed);
 }
 
@@ -94,8 +103,14 @@
 }
 
 .cta-banner .app-btn--outline {
-  border-color: var(--color-text-muted);
-  color: var(--color-text-primary);
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.cta-banner .app-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+  color: var(--white);
 }
 
 /* Trust badge */

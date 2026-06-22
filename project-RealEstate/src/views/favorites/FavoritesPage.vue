@@ -28,6 +28,7 @@ const estates = () => items.value.map((fav) => fav.estate).filter(Boolean)
         :title="narrative.title"
         :description="narrative.description"
         :step="narrative.step"
+        icon="bi-heart"
       />
 
       <LoadingSpinner v-if="loading" />

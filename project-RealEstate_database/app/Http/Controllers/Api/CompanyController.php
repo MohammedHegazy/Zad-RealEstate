@@ -49,6 +49,12 @@ class CompanyController extends BaseApiController
             $query->where('company_name', 'like', '%'.$request->search.'%');
         }
 
+        $sort = $request->input('sort', 'newest');
+        $query = match ($sort) {
+            'trust' => $query->orderBy('trust_score', 'desc'),
+            'employees' => $query->orderBy('employees_num', 'desc'),
+            default => $query,
+        };
         $companies = $query->latest()->paginate($request->integer('per_page', 15));
 
         return $this->successResponse(

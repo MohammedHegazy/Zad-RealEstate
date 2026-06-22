@@ -62,8 +62,9 @@ onMounted(() => fetchRecommendations(1, true))
       <PageIntro
         overline="ذكاء اصطناعي"
         title="عقارات مقترحة لك"
-        description="نحلّل عقاراتك المفضلة ونقارنها ببقية العقارات لنعرض الأقرب لذوقك."
+        description="نحلّل عقاراتك المفضلة ونقارنها بباقي العقارات لنعرض الأقرب لذوقك."
         step="discover"
+        icon="bi-stars"
       />
 
       <div v-if="summary" class="recommendations-page__summary">

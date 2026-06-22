@@ -37,7 +37,7 @@ const footerLinks = [
           <h4 class="app-footer__heading">تواصل معنا</h4>
           <ul class="app-footer__contact">
             <li><i class="bi bi-envelope"></i> info@ziad-realestate.com</li>
-            <li><i class="bi bi-telephone"></i> +963 11 000 0000</li>
+            <li><i class="bi bi-telephone"></i> <span dir="ltr">+963 11 000 0000</span></li>
             <li><i class="bi bi-geo-alt"></i> دمشق، سوريا</li>
           </ul>
         </div>

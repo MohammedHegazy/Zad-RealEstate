@@ -21,6 +21,8 @@ const {
   agents,
   companies,
   mapStats,
+  totalCities,
+  totalAgents,
   fetchHomeData,
 } = useHomePage()
 
@@ -48,11 +50,11 @@ onMounted(fetchHomeData)
                 <span>عقار نشط</span>
               </div>
               <div class="homepage-hero__stat">
-                <strong>{{ cities.length || '—' }}</strong>
+                <strong>{{ totalCities || '—' }}</strong>
                 <span>مدينة</span>
               </div>
               <div class="homepage-hero__stat">
-                <strong>{{ agents.length || '—' }}</strong>
+                <strong>{{ totalAgents || '—' }}</strong>
                 <span>وسيط معتمد</span>
               </div>
             </div>
@@ -79,6 +81,7 @@ onMounted(fetchHomeData)
           <SectionHeader
             title="أحدث العقارات"
             subtitle="إضافات جديدة"
+            icon="bi-building"
             to="/estates"
           />
 
@@ -102,6 +105,7 @@ onMounted(fetchHomeData)
           <SectionHeader
             title="استكشف حسب المدينة"
             subtitle="وجهات عقارية"
+            icon="bi-geo-alt"
             to="/cities"
           />
 
@@ -119,6 +123,7 @@ onMounted(fetchHomeData)
           <SectionHeader
             title="أشهر المناطق"
             subtitle="أحياء مميزة"
+            icon="bi-pin-map"
             to="/places"
           />
 
@@ -145,6 +150,7 @@ onMounted(fetchHomeData)
           <SectionHeader
             title="أفضل الوكلاء"
             subtitle="خبراء معتمدون"
+            icon="bi-people"
             to="/agents"
           />
 
@@ -162,6 +168,7 @@ onMounted(fetchHomeData)
           <SectionHeader
             title="شركات عقارية موثوقة"
             subtitle="وكلاء معتمدون"
+            icon="bi-buildings"
             to="/companies"
           />
 

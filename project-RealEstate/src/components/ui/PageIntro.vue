@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  icon: {
+    type: String,
+    default: '',
+  },
 })
 
 const activeStep = computed(() => JOURNEY_STEPS.find((s) => s.id === props.step))
@@ -40,7 +44,10 @@ const activeStep = computed(() => JOURNEY_STEPS.find((s) => s.id === props.step)
     </div>
 
     <span v-if="overline" class="page-intro__overline text-overline">{{ overline }}</span>
-    <h1 class="page-intro__title">{{ title }}</h1>
+    <h1 class="page-intro__title">
+      <i v-if="icon" :class="['bi', icon, 'page-intro__title-icon']"></i>
+      {{ title }}
+    </h1>
     <p v-if="description" class="page-intro__description">{{ description }}</p>
 
     <div v-if="activeStep" class="page-intro__badge">

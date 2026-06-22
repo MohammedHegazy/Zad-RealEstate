@@ -49,6 +49,7 @@ const companyOptions = computed(() => [
         :title="narrative.title"
         :description="narrative.description"
         :step="narrative.step"
+        icon="bi-people"
       />
 
       <DirectoryToolbar
@@ -58,13 +59,19 @@ const companyOptions = computed(() => [
         @clear="clearFilters"
       >
         <template #filters>
-          <AppSelect
-            v-model="companiesId"
-            size="sm"
-            :options="companyOptions"
-            :disabled="companiesLoading"
-          />
-          <AppSelect v-model="sort" size="sm" :options="AGENT_SORT_OPTIONS" />
+          <div class="filter-wrap">
+            <i class="bi bi-buildings filter-wrap__icon"></i>
+            <AppSelect
+              v-model="companiesId"
+              size="sm"
+              :options="companyOptions"
+              :disabled="companiesLoading"
+            />
+          </div>
+          <div class="filter-wrap">
+            <i class="bi bi-sort-down filter-wrap__icon"></i>
+            <AppSelect v-model="sort" size="sm" :options="AGENT_SORT_OPTIONS" />
+          </div>
         </template>
       </DirectoryToolbar>
 

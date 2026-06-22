@@ -51,6 +51,7 @@ function resetFilters() {
         :title="narrative.title"
         :description="narrative.description"
         :step="narrative.step"
+        icon="bi-building"
       />
 
       <div class="estates-page__layout">

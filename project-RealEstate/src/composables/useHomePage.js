@@ -12,6 +12,8 @@ export function useHomePage() {
   const agents = ref([])
   const companies = ref([])
   const mapStats = ref({ total: 0, center: null })
+  const totalCities = ref(0)
+  const totalAgents = ref(0)
 
   async function fetchHomeData() {
     loading.value = true
@@ -44,6 +46,9 @@ export function useHomePage() {
         total: mapRes.data?.total_markers ?? 0,
         center: mapRes.data?.center ?? null,
       }
+
+      totalCities.value = citiesRes.pagination?.total ?? citiesRes.data?.length ?? 0
+      totalAgents.value = agentsRes.pagination?.total ?? agentsRes.data?.length ?? 0
     } catch (err) {
       error.value = getErrorMessage(err, 'تعذّر تحميل بيانات الصفحة الرئيسية.')
     } finally {
@@ -60,6 +65,8 @@ export function useHomePage() {
     agents,
     companies,
     mapStats,
+    totalCities,
+    totalAgents,
     fetchHomeData,
   }
 }

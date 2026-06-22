@@ -197,6 +197,12 @@
   box-shadow: 0 4px 16px rgba(126, 87, 194, 0.4);
 }
 
+.property-card__action-btn[data-action="chat"]:hover {
+  background: rgba(0, 150, 136, 0.85);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 150, 136, 0.4);
+}
+
 .property-card__action-fav.favorite-btn {
   display: flex;
   align-items: center;
@@ -334,6 +340,20 @@
 .property-card__footer {
   margin-top: auto;
   padding-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.property-card__footer-price {
+  font-family: var(--font-family-price);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.2;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.65rem;
+  background: var(--color-background-muted);
 }
 
 .property-card__link {

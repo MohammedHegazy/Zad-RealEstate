@@ -37,6 +37,14 @@ function shareEstate(event) {
   }
 }
 
+function chatWithOwner(event) {
+  event.stopPropagation()
+  const ownerId = props.estate.user_id
+  if (ownerId) {
+    router.push(`/chat/${ownerId}?estate=${encodeURIComponent(props.estate.name)}`)
+  }
+}
+
 function goToEstateSection(event, hash = '') {
   event.stopPropagation()
   router.push(`/estates/${props.estate.id}${hash}`)
@@ -63,16 +71,6 @@ function goToEstateSection(event, hash = '') {
           مفروش
         </span>
       </div>
-      <div class="property-card__price-float">
-        <span class="property-card__price-value">
-          {{
-            estate.monthly_rent && Number(estate.monthly_rent) > 0
-              ? formatPrice(estate.monthly_rent, { suffix: '/شهر' })
-              : formatPrice(estate.price)
-          }}
-        </span>
-      </div>
-
       <div class="property-card__actions" @click.stop>
         <FavoriteButton :estate-id="estate.id" size="sm" icon-only class="property-card__action-fav" />
         <button
@@ -90,6 +88,14 @@ function goToEstateSection(event, hash = '') {
           @click="shareEstate"
         >
           <i class="bi bi-share" />
+        </button>
+        <button
+          type="button"
+          class="property-card__action-btn"
+          data-action="chat"
+          @click="chatWithOwner"
+        >
+          <i class="bi bi-chat-dots" />
         </button>
         <button
           type="button"
@@ -146,6 +152,13 @@ function goToEstateSection(event, hash = '') {
       </div>
 
       <div class="property-card__footer">
+        <div class="property-card__footer-price">
+          {{
+            estate.monthly_rent && Number(estate.monthly_rent) > 0
+              ? formatPrice(estate.monthly_rent, { suffix: '/شهر' })
+              : formatPrice(estate.price)
+          }}
+        </div>
         <RouterLink :to="`/estates/${estate.id}`" class="property-card__link">
           <span>عرض التفاصيل</span>
           <i class="bi bi-arrow-left-short" />

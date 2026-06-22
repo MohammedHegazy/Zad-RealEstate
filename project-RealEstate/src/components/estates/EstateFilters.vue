@@ -2,7 +2,6 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 import AppButton from '@/components/ui/AppButton.vue'
-import AppFormGroup from '@/components/ui/AppFormGroup.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppSearchInput from '@/components/ui/AppSearchInput.vue'
 import AppSelect from '@/components/ui/AppSelect.vue'
@@ -94,70 +93,70 @@ function handleReset() {
 </script>
 
 <template>
-  <aside class="estate-filters">
-    <h3 class="estate-filters__title">
-      <i class="bi bi-funnel"></i>
-      تصفية النتائج
-    </h3>
-
-    <form class="estate-filters__form" @submit.prevent="handleApply">
-      <AppFormGroup label="بحث" label-for="filter-search">
+  <form class="estate-filters-toolbar" @submit.prevent="handleApply">
+    <div class="estate-filters-toolbar__row">
+      <div class="estate-filters-toolbar__group estate-filters-toolbar__group--search">
         <AppSearchInput
-          id="filter-search"
           v-model="local.search"
           placeholder="اسم أو وصف العقار"
         />
-      </AppFormGroup>
-
-      <AppFormGroup label="المدينة" label-for="filter-city">
-        <AppSelect id="filter-city" v-model="local.cities_id" :options="cityOptions" />
-      </AppFormGroup>
-
-      <AppFormGroup v-if="places.length" label="المنطقة" label-for="filter-place">
-        <AppSelect id="filter-place" v-model="local.places_id" :options="placeOptions" />
-      </AppFormGroup>
-
-      <AppFormGroup label="الفئة" label-for="filter-type">
-        <AppSelect id="filter-type" v-model="local.type_text" :options="ESTATE_TYPE_OPTIONS" />
-      </AppFormGroup>
-
-      <AppFormGroup label="النوع" label-for="filter-kind">
-        <AppSelect id="filter-kind" v-model="local.kind_text" :options="ESTATE_KIND_OPTIONS" />
-      </AppFormGroup>
-
-      <AppFormGroup label="الغرض" label-for="filter-listing">
-        <AppSelect id="filter-listing" v-model="local.listing_type" :options="LISTING_TYPE_OPTIONS" />
-      </AppFormGroup>
-
-      <AppFormGroup label="مفروش" label-for="filter-furnished">
-        <AppSelect id="filter-furnished" v-model="local.is_furnished" :options="FURNISHED_OPTIONS" />
-      </AppFormGroup>
-
-      <div class="row g-2">
-        <div class="col-6">
-          <AppFormGroup label="أقل سعر" label-for="filter-min-price">
-            <AppInput id="filter-min-price" v-model="local.min_price" type="number" placeholder="0" />
-          </AppFormGroup>
-        </div>
-        <div class="col-6">
-          <AppFormGroup label="أعلى سعر" label-for="filter-max-price">
-            <AppInput id="filter-max-price" v-model="local.max_price" type="number" placeholder="∞" />
-          </AppFormGroup>
-        </div>
       </div>
 
-      <AppFormGroup label="الحد الأدنى للغرف" label-for="filter-bedrooms">
-        <AppInput id="filter-bedrooms" v-model="local.min_bedrooms" type="number" placeholder="0" />
-      </AppFormGroup>
-
-      <AppFormGroup label="الترتيب" label-for="filter-sort">
-        <AppSelect id="filter-sort" v-model="local.sort" :options="ESTATE_SORT_OPTIONS" />
-      </AppFormGroup>
-
-      <div class="estate-filters__actions">
-        <AppButton type="submit" variant="primary" block>تطبيق</AppButton>
-        <AppButton type="button" variant="outline" block @click="handleReset">مسح الفلاتر</AppButton>
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-geo-alt estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.cities_id" :options="cityOptions" />
       </div>
-    </form>
-  </aside>
+
+      <div v-if="places.length" class="estate-filters-toolbar__group">
+        <i class="bi bi-pin-map estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.places_id" :options="placeOptions" />
+      </div>
+
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-grid estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.type_text" :options="ESTATE_TYPE_OPTIONS" />
+      </div>
+
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-house estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.kind_text" :options="ESTATE_KIND_OPTIONS" />
+      </div>
+
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-tag estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.listing_type" :options="LISTING_TYPE_OPTIONS" />
+      </div>
+
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-lamp estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.is_furnished" :options="FURNISHED_OPTIONS" />
+      </div>
+
+      <div class="estate-filters-toolbar__group estate-filters-toolbar__group--price">
+        <AppInput v-model="local.min_price" type="number" placeholder="أقل سعر" icon="bi-currency-exchange" />
+      </div>
+
+      <div class="estate-filters-toolbar__group estate-filters-toolbar__group--price">
+        <AppInput v-model="local.max_price" type="number" placeholder="أعلى سعر" icon="bi-currency-exchange" />
+      </div>
+
+      <div class="estate-filters-toolbar__group estate-filters-toolbar__group--bedrooms">
+        <AppInput v-model="local.min_bedrooms" type="number" placeholder="الغرف" icon="bi-door-open" />
+      </div>
+
+      <div class="estate-filters-toolbar__group">
+        <i class="bi bi-sort-down estate-filters-toolbar__icon"></i>
+        <AppSelect v-model="local.sort" :options="ESTATE_SORT_OPTIONS" />
+      </div>
+
+      <div class="estate-filters-toolbar__actions">
+        <AppButton type="submit" variant="primary" size="sm">
+          <i class="bi bi-funnel" />
+        </AppButton>
+        <AppButton type="button" variant="outline" size="sm" @click="handleReset">
+          <i class="bi bi-x-lg" />
+        </AppButton>
+      </div>
+    </div>
+  </form>
 </template>

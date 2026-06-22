@@ -70,6 +70,18 @@
   width: 100%;
 }
 
+/* Hide number input spinners globally */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .field-shell__icon {
   position: absolute;
   top: 50%;
@@ -278,7 +290,7 @@
 
 .app-autocomplete--open .app-autocomplete__input {
   border-color: var(--field-border-focus);
-  background-color: var(--field-bg-focus);
+  /* background-color: var(--field-bg-focus); */
   box-shadow: var(--field-focus-ring);
 }
 

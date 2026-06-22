@@ -16,6 +16,10 @@ defineProps({
     type: String,
     default: 'عرض الكل',
   },
+  icon: {
+    type: String,
+    default: '',
+  },
 })
 </script>
 
@@ -23,7 +27,10 @@ defineProps({
   <div class="section-header">
     <div class="section-header__content">
       <span v-if="subtitle" class="section-header__overline text-overline">{{ subtitle }}</span>
-      <h2 class="section-header__title">{{ title }}</h2>
+      <h2 class="section-header__title">
+        <i v-if="icon" :class="['bi', icon, 'section-header__icon']"></i>
+        {{ title }}
+      </h2>
     </div>
 
     <RouterLink v-if="to" :to="to" class="section-header__link">
