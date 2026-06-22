@@ -1,0 +1,39 @@
+@startuml
+title حالات الاستخدام - مدير النظام
+left to right direction
+skinparam packageStyle rectangle
+
+actor "مدير النظام" as Admin
+
+rectangle "منصة زاد للعقارات - الإدارة" {
+  usecase "تسجيل دخول المدير والخروج" as UC_Auth
+  usecase "عرض إحصائيات المنصة" as UC_Dashboard
+  usecase "إدارة المستخدمين" as UC_Users
+  usecase "إدارة المدن والمناطق" as UC_Locations
+  usecase "إدارة العقارات ووسائطها" as UC_Estates
+  usecase "اعتماد أو رفض العقارات" as UC_EstateStatus
+  usecase "إدارة الشركات وروابطها" as UC_Companies
+  usecase "اعتماد أو رفض أو تعليق الشركات" as UC_CompanyStatus
+  usecase "إدارة الوسطاء" as UC_Agents
+  usecase "إدارة روابط التواصل" as UC_Social
+  usecase "مراجعة واعتماد أو رفض التقييمات" as UC_Reviews
+  usecase "مراجعة طلبات التوثيق" as UC_Verifications
+  usecase "إرسال وإدارة الإشعارات" as UC_Notifications
+  usecase "مراقبة الرسائل وحذف المخالف منها" as UC_Messages
+}
+
+Admin --> UC_Auth
+Admin --> UC_Dashboard
+Admin --> UC_Users
+Admin --> UC_Locations
+Admin --> UC_Estates
+Admin --> UC_EstateStatus
+Admin --> UC_Companies
+Admin --> UC_CompanyStatus
+Admin --> UC_Agents
+Admin --> UC_Social
+Admin --> UC_Reviews
+Admin --> UC_Verifications
+Admin --> UC_Notifications
+Admin --> UC_Messages
+@enduml

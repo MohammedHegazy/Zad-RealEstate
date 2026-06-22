@@ -1,0 +1,35 @@
+@startuml
+title حالات الاستخدام - مالك العقار
+left to right direction
+skinparam packageStyle rectangle
+
+actor "مالك عقار" as Owner
+
+rectangle "منصة زاد للعقارات" {
+  usecase "إدارة الملف الشخصي" as UC_Profile
+  usecase "عرض عقاراتي" as UC_MyEstates
+  usecase "إضافة عقار جديد" as UC_CreateEstate
+  usecase "تعديل أو حذف عقار" as UC_EditEstate
+  usecase "إدارة صور وفيديوهات وإعلانات العقار" as UC_Media
+  usecase "إدارة روابط تواصل العقار" as UC_Social
+  usecase "متابعة حالة اعتماد العقار" as UC_Status
+  usecase "عرض مؤشرات الاستثمار والمشاهدات" as UC_Metrics
+  usecase "طلب توقع سعر لعقاري" as UC_Price
+  usecase "استقبال ومراسلة المهتمين" as UC_Messages
+  usecase "متابعة الإشعارات" as UC_Notifications
+  usecase "استخدام البحث والمفضلة والتقييمات كمستخدم مسجل" as UC_Shared
+}
+
+Owner --> UC_Profile
+Owner --> UC_MyEstates
+Owner --> UC_CreateEstate
+Owner --> UC_EditEstate
+Owner --> UC_Media
+Owner --> UC_Social
+Owner --> UC_Status
+Owner --> UC_Metrics
+Owner --> UC_Price
+Owner --> UC_Messages
+Owner --> UC_Notifications
+Owner --> UC_Shared
+@enduml

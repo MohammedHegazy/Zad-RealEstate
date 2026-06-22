@@ -1,0 +1,85 @@
+@startuml
+title النظرة العامة لحالات الاستخدام - منصة زاد للعقارات
+top to bottom direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 35
+
+actor "زائر" as Visitor
+actor "مستخدم مسجل" as User
+actor "مشتري / مستثمر" as Buyer
+actor "مالك عقار" as Owner
+actor "وسيط عقاري" as Agent
+actor "شركة عقارية" as Company
+actor "مدير النظام" as Admin
+
+rectangle "منصة زاد للعقارات" {
+  package "الاستخدام العام" {
+    usecase "تصفح العقارات والمدن والمناطق" as UC_PublicBrowse
+    usecase "عرض الوسطاء والشركات والتقييمات" as UC_PublicDirectory
+    usecase "تسجيل حساب / تسجيل الدخول" as UC_PublicAuth
+  }
+
+  package "المستخدم المسجل" {
+    usecase "إدارة الملف الشخصي" as UC_UserProfile
+    usecase "إدارة العقارات المفضلة" as UC_UserFavorites
+    usecase "كتابة وإدارة التقييمات" as UC_UserReviews
+    usecase "إرسال الرسائل واستقبال الإشعارات" as UC_UserMessages
+  }
+
+  package "المشتري / المستثمر" {
+    usecase "التوصيات الذكية وتوقع السعر" as UC_BuyerSmart
+    usecase "إدارة التحليلات والمحافظ الاستثمارية" as UC_BuyerInvestment
+  }
+
+  package "مالك العقار" {
+    usecase "إدارة عقاراتي ووسائطها" as UC_OwnerEstate
+    usecase "متابعة اعتماد العقارات" as UC_OwnerStatus
+  }
+
+  package "الوسيط العقاري" {
+    usecase "إدارة ملف الوسيط" as UC_AgentProfile
+  }
+
+  package "الشركة العقارية" {
+    usecase "إدارة الشركة والوكلاء" as UC_CompanyProfile
+    usecase "متابعة اعتماد الشركة" as UC_CompanyStatus
+  }
+
+  package "الإدارة" {
+    usecase "إدارة المنصة والاعتمادات" as UC_AdminOps
+    usecase "مراجعة التقييمات والتوثيق" as UC_AdminTrust
+  }
+}
+
+Visitor --> UC_PublicBrowse
+Visitor --> UC_PublicDirectory
+Visitor --> UC_PublicAuth
+
+User --> UC_UserProfile
+User --> UC_UserFavorites
+User --> UC_UserReviews
+User --> UC_UserMessages
+
+Buyer --> UC_BuyerSmart
+Buyer --> UC_BuyerInvestment
+
+Owner --> UC_OwnerEstate
+Owner --> UC_OwnerStatus
+
+Agent --> UC_AgentProfile
+
+Company --> UC_CompanyProfile
+Company --> UC_CompanyStatus
+
+Admin --> UC_AdminOps
+Admin --> UC_AdminTrust
+
+Visitor -[hidden]down-> User
+User -[hidden]down-> Buyer
+Buyer -[hidden]down-> Owner
+Owner -[hidden]down-> Agent
+Agent -[hidden]down-> Company
+Company -[hidden]down-> Admin
+@enduml

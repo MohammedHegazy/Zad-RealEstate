@@ -1,0 +1,29 @@
+@startuml
+title حالات الاستخدام - الوسيط العقاري
+left to right direction
+skinparam packageStyle rectangle
+
+actor "وسيط عقاري" as Agent
+
+rectangle "منصة زاد للعقارات" {
+  usecase "إدارة الملف الشخصي" as UC_Profile
+  usecase "عرض وتحديث ملف الوسيط" as UC_AgentProfile
+  usecase "الظهور في دليل الوسطاء" as UC_Directory
+  usecase "الظهور ضمن شركة عند الربط" as UC_CompanyLink
+  usecase "قراءة تقييمات العملاء ودرجة الثقة" as UC_Reviews
+  usecase "طلب توثيق الحساب" as UC_Verification
+  usecase "التواصل مع المستخدمين" as UC_Messages
+  usecase "متابعة الإشعارات" as UC_Notifications
+  usecase "تصفح العقارات وكتابة تقييمات كمستخدم مسجل" as UC_Shared
+}
+
+Agent --> UC_Profile
+Agent --> UC_AgentProfile
+Agent --> UC_Directory
+Agent --> UC_CompanyLink
+Agent --> UC_Reviews
+Agent --> UC_Verification
+Agent --> UC_Messages
+Agent --> UC_Notifications
+Agent --> UC_Shared
+@enduml

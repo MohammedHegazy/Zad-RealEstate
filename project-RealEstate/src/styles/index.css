@@ -1,0 +1,68 @@
+/**
+ * Global styles entry — imports design tokens and base reset.
+ */
+@import 'bootstrap/dist/css/bootstrap.rtl.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'leaflet/dist/leaflet.css';
+
+@import './colors.css';
+@import './fonts.css';
+@import './components/buttons.css';
+@import './components/table-actions.css';
+@import './components/badges.css';
+@import './components/ui.css';
+@import './components/cards.css';
+@import './components/forms.css';
+@import './components/navbar.css';
+@import './components/footer.css';
+@import './pages/homepage.css';
+@import './pages/auth.css';
+@import './pages/estates.css';
+@import './pages/directories.css';
+@import './pages/agents.css';
+@import './pages/admin.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}

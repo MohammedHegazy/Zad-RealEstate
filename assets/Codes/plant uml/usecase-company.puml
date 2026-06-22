@@ -1,0 +1,33 @@
+@startuml
+title حالات الاستخدام - الشركة العقارية
+left to right direction
+skinparam packageStyle rectangle
+
+actor "شركة عقارية" as Company
+
+rectangle "منصة زاد للعقارات" {
+  usecase "إدارة حساب الشركة" as UC_Profile
+  usecase "إنشاء وتحديث وحذف ملف الشركة" as UC_CompanyProfile
+  usecase "متابعة حالة اعتماد الشركة" as UC_Approval
+  usecase "إدارة وكلاء الشركة" as UC_Agents
+  usecase "إدارة روابط تواصل الشركة" as UC_Social
+  usecase "الظهور في دليل الشركات" as UC_Public
+  usecase "قراءة تقييمات الشركة ودرجة الثقة" as UC_Reviews
+  usecase "طلب توثيق الحساب" as UC_Verification
+  usecase "التواصل مع المستخدمين" as UC_Messages
+  usecase "متابعة الإشعارات" as UC_Notifications
+  usecase "تصفح العقارات واستخدام قدرات المستخدم المسجل" as UC_Shared
+}
+
+Company --> UC_Profile
+Company --> UC_CompanyProfile
+Company --> UC_Approval
+Company --> UC_Agents
+Company --> UC_Social
+Company --> UC_Public
+Company --> UC_Reviews
+Company --> UC_Verification
+Company --> UC_Messages
+Company --> UC_Notifications
+Company --> UC_Shared
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+title حالات الاستخدام - المشتري / المستثمر
+left to right direction
+skinparam packageStyle rectangle
+
+actor "مشتري / مستثمر" as Buyer
+
+rectangle "منصة زاد للعقارات" {
+  usecase "إدارة الملف الشخصي وروابط التواصل" as UC_Profile
+  usecase "تصفح العقارات والبحث على الخريطة" as UC_Browse
+  usecase "إضافة وإزالة العقارات المفضلة" as UC_Favorites
+  usecase "عرض وتحديث التوصيات الذكية" as UC_Recommendations
+  usecase "طلب توقع سعر عقار" as UC_Price
+  usecase "حفظ تحليلات استثمارية" as UC_Analysis
+  usecase "إدارة المحافظ وعقارات المحفظة" as UC_Portfolio
+  usecase "كتابة وتعديل وحذف تقييماتي" as UC_Reviews
+  usecase "مراسلة المستخدمين والتواصل مع الوكيل" as UC_Messages
+  usecase "عرض وقراءة الإشعارات" as UC_Notifications
+  usecase "طلب توثيق الحساب" as UC_Verification
+}
+
+Buyer --> UC_Profile
+Buyer --> UC_Browse
+Buyer --> UC_Favorites
+Buyer --> UC_Recommendations
+Buyer --> UC_Price
+Buyer --> UC_Analysis
+Buyer --> UC_Portfolio
+Buyer --> UC_Reviews
+Buyer --> UC_Messages
+Buyer --> UC_Notifications
+Buyer --> UC_Verification
+@enduml

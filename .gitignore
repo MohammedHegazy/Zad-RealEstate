@@ -1,0 +1,27 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Frontend
+project-RealEstate/node_modules/
+project-RealEstate/dist/
+
+# Backend
+project-RealEstate_database/vendor/
+project-RealEstate_database/node_modules/
+project-RealEstate_database/public/build/
+project-RealEstate_database/storage/*.key
+project-RealEstate_database/.phpunit.cache/
+
+# Local-only folders
+/Files
+_transcript_extract/
+colors.css

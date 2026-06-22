@@ -1,0 +1,85 @@
+.app-footer {
+  margin-top: auto;
+  padding-block: 3rem 1.5rem;
+  background-color: var(--color-background-muted);
+  color: var(--color-text-primary);
+}
+
+.app-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.app-footer__brand i {
+  color: var(--color-primary);
+}
+
+.app-footer__desc {
+  margin: 0;
+  max-width: 28rem;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.app-footer__heading {
+  margin: 0 0 1rem;
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.app-footer__links,
+.app-footer__contact {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-footer__links li,
+.app-footer__contact li {
+  margin-bottom: 0.5rem;
+}
+
+.app-footer__links a {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.app-footer__links a:hover {
+  color: var(--color-primary);
+}
+
+.app-footer__contact li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.app-footer__contact i {
+  color: var(--color-primary);
+}
+
+.app-footer__bottom {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.app-footer__bottom p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}

@@ -1,0 +1,527 @@
+// Real Estate Platform API — Database schema (DBML)
+// Source of truth: database/migrations/ (29 migration files)
+// Do NOT edit migrations to match this file — update this file when migrations change.
+// Import at https://dbdiagram.io
+//
+// Tables: 30 (application + Laravel framework)
+// Excluded: migrations (Laravel meta table, not in DBML)
+
+Project real_estate_platform {
+  database_type: 'MySQL'
+  Note: 'Laravel — columns, indexes, and FK rules match migrations exactly'
+}
+
+// =============================================================================
+// Authentication & session
+// =============================================================================
+
+Table users {
+  id bigint [pk, increment]
+  username varchar [unique, not null]
+  fname varchar [not null]
+  lname varchar [not null]
+  status varchar [not null, default: 'active']
+  type varchar [not null]
+  is_verified boolean [not null, default: false]
+  email varchar [unique, not null]
+  password varchar [not null]
+  phone varchar [not null]
+  countre_code_phone varchar [not null]
+  gender varchar [not null]
+  remember_token varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table personal_access_tokens {
+  id bigint [pk, increment]
+  tokenable_type varchar [not null, note: 'Polymorphic — Sanctum; typically App\\Models\\User']
+  tokenable_id bigint [not null]
+  name text [not null]
+  token varchar(64) [unique, not null]
+  abilities text
+  last_used_at timestamp
+  expires_at timestamp
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tokenable_type, tokenable_id) [note: 'morphs(tokenable)']
+    expires_at
+  }
+}
+
+Table password_reset_tokens {
+  email varchar [pk]
+  token varchar [not null]
+  created_at timestamp
+}
+
+// =============================================================================
+// Geography — cities 1:N places
+// =============================================================================
+
+Table cities {
+  id bigint [pk, increment]
+  name varchar [not null]
+  image varchar
+  latitude decimal(10,8)
+  longitude decimal(11,8)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table places {
+  id bigint [pk, increment]
+  cities_id bigint [not null, ref: > cities.id, note: 'ON DELETE CASCADE']
+  name varchar [not null]
+  latitude decimal(10,8)
+  longitude decimal(11,8)
+  created_at timestamp
+  updated_at timestamp
+}
+
+// =============================================================================
+// Companies & agents
+// =============================================================================
+
+Table companies {
+  id bigint [pk, increment]
+  user_id bigint [unique, not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  places_id bigint [not null, ref: > places.id, note: 'ON DELETE CASCADE']
+  company_name varchar [not null]
+  website varchar
+  employees_num int [not null, default: 1]
+  description text [not null]
+  work_days json [not null]
+  status varchar [not null, default: 'pending']
+  profile_image varchar
+  banner_image varchar
+  trust_score tinyint [not null, default: 0]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, status)
+    places_id
+  }
+}
+
+Table agents {
+  id bigint [pk, increment]
+  user_id bigint [unique, not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  companies_id bigint [not null, ref: > companies.id, note: 'ON DELETE CASCADE']
+  profile_image varchar
+  views int [not null, default: 0]
+  shares int [not null, default: 0]
+  trust_score tinyint [not null, default: 0]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// =============================================================================
+// Property listings & media
+// =============================================================================
+
+Table estates {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  places_id bigint [not null, ref: > places.id, note: 'ON DELETE CASCADE']
+  latitude decimal(10,8)
+  longitude decimal(11,8)
+  name varchar [not null]
+  phone varchar [not null]
+  country_code_phone varchar(10) [not null]
+  space_of_estate decimal(10,2) [not null]
+  price_of_meter decimal(12,2) [not null]
+  price decimal(15,2) [not null]
+  monthly_rent decimal(12,2)
+  annual_expenses decimal(12,2) [not null, default: 0]
+  maintenance_cost decimal(12,2) [not null, default: 0]
+  annual_property_tax decimal(12,2) [not null, default: 0]
+  annual_hoa_or_service decimal(12,2) [not null, default: 0]
+  occupancy_rate decimal(5,2) [not null, default: 100]
+  expected_annual_income decimal(15,2)
+  roi decimal(10,4)
+  payback_period decimal(10,2)
+  floor int [not null, default: 0]
+  num_of_bedrooms int [not null, default: 0]
+  num_of_livingrooms int [not null, default: 0]
+  num_of_receptions int [not null, default: 0]
+  num_of_bathrooms int [not null, default: 0]
+  num_of_kitchens int [not null, default: 1]
+  num_of_balconies int [not null, default: 0]
+  status varchar [not null, default: 'pending']
+  type_text varchar [not null]
+  kind_text varchar [not null]
+  is_furnished boolean [not null, default: false]
+  description text [not null]
+  real_number varchar
+  date_of_build varchar(50)
+  state_of_build varchar
+  rent_kind varchar
+  rent_description text
+  views int [not null, default: 0]
+  shares int [not null, default: 0]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (latitude, longitude)
+  }
+}
+
+Table estate_images {
+  id bigint [pk, increment]
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  image varchar [not null]
+  is_primary boolean [not null, default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table estate_videos {
+  id bigint [pk, increment]
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  video varchar [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table estate_ads {
+  id bigint [pk, increment]
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  image varchar [not null]
+  is_main boolean [not null, default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// =============================================================================
+// Social links — polymorphic (socialable_type / socialable_id)
+// =============================================================================
+
+Table social_links {
+  id bigint [pk, increment]
+  socialable_type varchar [not null]
+  socialable_id bigint [not null]
+  platform varchar [not null]
+  url varchar(500) [not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (socialable_type, socialable_id) [note: 'morphs(socialable)']
+    (socialable_type, socialable_id, platform) [unique]
+  }
+
+  Note: 'Polymorphic — no DB FK. App targets: User, Companies, Agent, Estate'
+}
+
+// =============================================================================
+// Favorites & messaging
+// =============================================================================
+
+Table favorite_estates {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, estate_id) [unique]
+  }
+}
+
+Table favorite_agents {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  agent_id bigint [not null, ref: > agents.id, note: 'ON DELETE CASCADE']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, agent_id) [unique]
+  }
+}
+
+Table messages {
+  id bigint [pk, increment]
+  sender_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  receiver_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  text text [not null]
+  is_read boolean [not null, default: false]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table notifications {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  content text [not null]
+  is_read boolean [not null, default: false]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, is_read)
+    (user_id, created_at)
+  }
+}
+
+// =============================================================================
+// Investment analysis, AI prediction, portfolios
+// =============================================================================
+
+Table investment_analyses {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  property_price decimal(15,2) [not null]
+  monthly_rent decimal(12,2) [not null, default: 0]
+  annual_expenses decimal(12,2) [not null, default: 0]
+  maintenance_cost decimal(12,2) [not null, default: 0]
+  tax_cost decimal(12,2) [not null, default: 0]
+  occupancy_rate decimal(5,2) [not null, default: 100]
+  expected_annual_income decimal(15,2)
+  roi decimal(10,4)
+  payback_period decimal(10,2)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table price_predictions {
+  id bigint [pk, increment]
+  user_id bigint [ref: > users.id, note: 'Nullable — ON DELETE SET NULL']
+  estate_id bigint [ref: > estates.id, note: 'Nullable — ON DELETE SET NULL']
+  place_label varchar
+  input_features json [not null]
+  predicted_price decimal(15,2) [not null]
+  listed_price decimal(15,2)
+  price_difference decimal(15,2)
+  price_difference_percent decimal(8,2)
+  valuation_insight varchar
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (estate_id, created_at)
+    created_at
+  }
+}
+
+Table investment_portfolios {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  name varchar [not null]
+  description text
+  target_budget decimal(15,2)
+  risk_level varchar [not null, default: 'moderate']
+  status varchar [not null, default: 'active']
+  is_default boolean [not null, default: false]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, is_default)
+  }
+}
+
+Table portfolio_properties {
+  id bigint [pk, increment]
+  portfolio_id bigint [not null, ref: > investment_portfolios.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  status varchar [not null, default: 'tracking']
+  investment_amount decimal(15,2)
+  notes text
+  invested_at timestamp
+  sold_at timestamp
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (portfolio_id, estate_id) [unique]
+    (portfolio_id, status)
+    (estate_id, status)
+  }
+}
+
+// =============================================================================
+// Recommendations & user preferences
+// =============================================================================
+
+Table user_preferences {
+  id bigint [pk, increment]
+  user_id bigint [unique, not null, ref: - users.id, note: 'ON DELETE CASCADE — 1:1']
+  cities_id bigint [ref: > cities.id, note: 'Nullable — ON DELETE SET NULL']
+  places_id bigint [ref: > places.id, note: 'Nullable — ON DELETE SET NULL']
+  min_budget decimal(15,2)
+  max_budget decimal(15,2)
+  preferred_property_type varchar
+  preferred_rooms tinyint
+  property_function varchar
+  investment_goal varchar
+  risk_level varchar [not null, default: 'moderate']
+  interests json
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table property_interactions {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  interaction_type varchar [not null]
+  interaction_score smallint [not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, created_at)
+    (user_id, estate_id)
+    (estate_id, interaction_type)
+  }
+}
+
+Table recommendations {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  recommendation_score decimal(5,2) [not null]
+  matching_percentage decimal(5,2) [not null]
+  score_factors json [not null]
+  recommendation_reason json [not null]
+  is_active boolean [not null, default: true]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, estate_id) [unique]
+    (user_id, is_active, recommendation_score)
+  }
+}
+
+// =============================================================================
+// Trust & credibility (reviews + verification)
+// =============================================================================
+
+Table property_reviews {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  estate_id bigint [not null, ref: > estates.id, note: 'ON DELETE CASCADE']
+  rating tinyint [not null]
+  review text
+  status varchar(20) [not null, default: 'pending']
+  admin_notes text
+  reviewed_at timestamp
+  reviewed_by bigint [ref: > users.id, note: 'Nullable — ON DELETE SET NULL']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, estate_id) [unique]
+    (estate_id, status)
+  }
+}
+
+Table agent_reviews {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  agent_id bigint [not null, ref: > agents.id, note: 'ON DELETE CASCADE']
+  rating tinyint [not null]
+  review text
+  status varchar(20) [not null, default: 'pending']
+  admin_notes text
+  reviewed_at timestamp
+  reviewed_by bigint [ref: > users.id, note: 'Nullable — ON DELETE SET NULL']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, agent_id) [unique]
+    (agent_id, status)
+  }
+}
+
+Table company_reviews {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  company_id bigint [not null, ref: > companies.id, note: 'ON DELETE CASCADE']
+  rating tinyint [not null]
+  review text
+  status varchar(20) [not null, default: 'pending']
+  admin_notes text
+  reviewed_at timestamp
+  reviewed_by bigint [ref: > users.id, note: 'Nullable — ON DELETE SET NULL']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, company_id) [unique]
+    (company_id, status)
+  }
+}
+
+Table verification_requests {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id, note: 'ON DELETE CASCADE']
+  document_type varchar(50) [not null]
+  document_path varchar [not null]
+  status varchar(20) [not null, default: 'pending']
+  admin_notes text
+  reviewed_at timestamp
+  reviewed_by bigint [ref: > users.id, note: 'Nullable — ON DELETE SET NULL']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (user_id, status)
+  }
+}
+
+// =============================================================================
+// Laravel system tables
+// =============================================================================
+
+Table cache {
+  key varchar [pk]
+  value mediumtext [not null]
+  expiration int [not null]
+
+  indexes {
+    expiration
+  }
+}
+
+Table cache_locks {
+  key varchar [pk]
+  owner varchar [not null]
+  expiration int [not null]
+
+  indexes {
+    expiration
+  }
+}
+
+Table failed_jobs {
+  id bigint [pk, increment]
+  uuid varchar [unique, not null]
+  connection text [not null]
+  queue text [not null]
+  payload longtext [not null]
+  exception longtext [not null]
+  failed_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+// =============================================================================
+// FK delete rules summary
+// =============================================================================
+// CASCADE: most user_id, estate_id, places_id, portfolio_id FKs
+// SET NULL: price_predictions.user_id/estate_id, user_preferences.cities_id/places_id,
+//           property_reviews.reviewed_by, agent_reviews.reviewed_by,
+//           company_reviews.reviewed_by, verification_requests.reviewed_by
+// Polymorphic (no DB FK): personal_access_tokens.tokenable, social_links.socialable
+//
+// Removed from schema (no migration): agents_rates — replaced by agent_reviews
+// No jobs table — only failed_jobs (migration 0001_01_01_000002)
