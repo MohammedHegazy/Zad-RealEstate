@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Portfolio;
 
+use App\Services\Investment\InvestmentCalculatorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,6 +14,8 @@ class EstateSummaryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $metrics = app(InvestmentCalculatorService::class)->calculateForEstate($this->resource);
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -20,8 +23,8 @@ class EstateSummaryResource extends JsonResource
             'type_text' => $this->type_text,
             'kind_text' => $this->kind_text,
             'price' => $this->price,
-            'roi' => $this->roi,
-            'expected_annual_income' => $this->expected_annual_income,
+            'roi' => $metrics->roi,
+            'expected_annual_income' => $metrics->expectedAnnualIncome,
             'place' => $this->whenLoaded('place', fn () => [
                 'id' => $this->place->id,
                 'name' => $this->place->name,

@@ -3,6 +3,7 @@
 namespace App\Services\Portfolio;
 
 use App\Exceptions\Portfolio\DuplicatePortfolioItemException;
+use App\Exceptions\Portfolio\EstateAlreadyTakenException;
 use App\Exceptions\Portfolio\EstateNotPublishedException;
 use App\Exceptions\Portfolio\InvalidPortfolioStatusTransitionException;
 use App\Exceptions\Portfolio\PortfolioItemNotFoundException;
@@ -83,6 +84,10 @@ class PortfolioService
     {
         $this->assertEstateIsPublished($estate);
 
+        if ($this->isEstateGloballyTaken($estate)) {
+            throw new EstateAlreadyTakenException($estate->id);
+        }
+
         return DB::transaction(function () use ($user, $estate, $data) {
             $portfolio = isset($data['portfolio_id'])
                 ? $this->resolvePortfolioForUser($user, (int) $data['portfolio_id'])
@@ -133,6 +138,8 @@ class PortfolioService
         if (! $this->canTransition($item->status, $newStatus)) {
             throw new InvalidPortfolioStatusTransitionException($item->status, $newStatus);
         }
+
+        $this->assertEstateNotTakenByOthers($user, $item->estate_id, $newStatus);
 
         return DB::transaction(function () use ($item, $newStatus, $data) {
             $item->status = $newStatus;
@@ -234,7 +241,11 @@ class PortfolioService
             $query->where('status', $this->normalizeStatus((string) $filters['status']));
         }
 
-        return $query->latest()->paginate($perPage);
+        $items = $query->latest()->paginate($perPage);
+
+        $this->applyGlobalTakenFlag($items->items());
+
+        return $items;
     }
 
     /**
@@ -260,10 +271,14 @@ class PortfolioService
     {
         $this->assertUserOwnsPortfolio($user, $portfolio);
 
-        return $portfolio->properties()
+        $items = $portfolio->properties()
             ->with('estate.place')
             ->latest()
             ->get();
+
+        $this->applyGlobalTakenFlag($items->all());
+
+        return $items;
     }
 
     public function calculateTotalInvestedAmount(User $user, ?InvestmentPortfolio $portfolio = null): float
@@ -361,6 +376,55 @@ class PortfolioService
             'counts_by_status' => $countsByStatus,
             'total_items' => $totalItems,
         ];
+    }
+
+    private function isEstateGloballyTaken(Estate $estate): bool
+    {
+        return PortfolioProperty::query()
+            ->where('estate_id', $estate->id)
+            ->whereIn('status', [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD])
+            ->exists();
+    }
+
+    private function assertEstateNotTakenByOthers(User $user, int $estateId, string $newStatus): void
+    {
+        if (! in_array($newStatus, [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD], true)) {
+            return;
+        }
+
+        $taken = PortfolioProperty::query()
+            ->where('estate_id', $estateId)
+            ->whereIn('status', [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD])
+            ->whereHas('portfolio', fn (Builder $q) => $q->where('user_id', '!=', $user->id))
+            ->exists();
+
+        if ($taken) {
+            throw new EstateAlreadyTakenException($estateId);
+        }
+    }
+
+    /**
+     * @param  list<PortfolioProperty>  $items
+     */
+    private function applyGlobalTakenFlag(array $items): void
+    {
+        if ($items === []) {
+            return;
+        }
+
+        $estateIds = array_map(fn (PortfolioProperty $i) => $i->estate_id, $items);
+
+        $takenEstateIds = PortfolioProperty::query()
+            ->whereIn('estate_id', $estateIds)
+            ->whereIn('status', [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD])
+            ->pluck('estate_id')
+            ->unique()
+            ->values()
+            ->all();
+
+        foreach ($items as $item) {
+            $item->global_taken = in_array($item->estate_id, $takenEstateIds, true);
+        }
     }
 
     private function resolvePortfolioForUser(User $user, int $portfolioId): InvestmentPortfolio

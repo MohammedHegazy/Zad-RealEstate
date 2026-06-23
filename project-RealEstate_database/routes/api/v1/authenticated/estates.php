@@ -49,6 +49,8 @@ Route::put('my/estates/{estate}/social-media', [SocialLinkController::class, 'up
         });
     });
 
+Route::get('my/estates/{estate}/portfolio-status', [EstateController::class, 'portfolioStatus'])->name('my.estates.portfolio-status');
+
 Route::prefix('estates/{estate}')->name('estates.')->group(function () {
     Route::post('favorite', [FavoriteEstateController::class, 'storeByEstate'])->name('favorite');
     Route::delete('favorite', [FavoriteEstateController::class, 'destroyByEstate'])->name('unfavorite');

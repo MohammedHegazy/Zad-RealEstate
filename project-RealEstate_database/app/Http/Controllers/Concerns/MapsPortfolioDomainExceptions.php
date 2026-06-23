@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Concerns;
 
 use App\Exceptions\Portfolio\DuplicatePortfolioItemException;
+use App\Exceptions\Portfolio\EstateAlreadyTakenException;
 use App\Exceptions\Portfolio\EstateNotPublishedException;
 use App\Exceptions\Portfolio\InvalidPortfolioStatusTransitionException;
 use App\Exceptions\Portfolio\PortfolioDomainException;
@@ -16,9 +17,10 @@ trait MapsPortfolioDomainExceptions
         PortfolioDomainException|InvalidArgumentException $e,
     ): JsonResponse {
         $status = match (true) {
-            $e instanceof EstateNotPublishedException => 422,
-            $e instanceof DuplicatePortfolioItemException => 422,
-            $e instanceof InvalidPortfolioStatusTransitionException => 422,
+            $e instanceof EstateNotPublishedException,
+            $e instanceof DuplicatePortfolioItemException,
+            $e instanceof EstateAlreadyTakenException,
+            $e instanceof InvalidPortfolioStatusTransitionException,
             $e instanceof InvalidArgumentException => 422,
             $e instanceof UnauthorizedPortfolioAccessException => 403,
             default => 400,

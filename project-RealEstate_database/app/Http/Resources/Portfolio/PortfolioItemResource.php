@@ -22,6 +22,7 @@ class PortfolioItemResource extends JsonResource
             'notes' => $this->notes,
             'invested_at' => $this->invested_at?->toIso8601String(),
             'sold_at' => $this->sold_at?->toIso8601String(),
+            'global_taken' => $this->global_taken ?? false,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
             'portfolio' => PortfolioResource::make($this->whenLoaded('portfolio')),

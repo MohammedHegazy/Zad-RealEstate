@@ -75,6 +75,28 @@ async function removeItem(itemId) {
   }
 }
 
+const updatingItemId = ref(null)
+
+async function updateItemStatus(itemId, status) {
+  if (!(await confirmStore.show({ message: 'هل أنت متأكد من تحديث حالة هذا العقار؟' }))) return
+  updatingItemId.value = itemId
+  try {
+    await portfoliosService.updateItem(itemId, { status })
+    await fetchPortfolio()
+  } catch {
+    // toast handled by global handler
+  } finally {
+    updatingItemId.value = null
+  }
+}
+
+function statusLabel(status) {
+  if (status === 'tracking') return { text: 'قيد التتبّع', cls: 'secondary' }
+  if (status === 'invested') return { text: 'مستثمر', cls: 'success' }
+  if (status === 'sold') return { text: 'مباع', cls: 'danger' }
+  return { text: status, cls: 'secondary' }
+}
+
 function riskLabel(level) {
   if (level === 'low') return { text: 'منخفض', cls: 'success' }
   if (level === 'moderate') return { text: 'متوسط', cls: 'warning' }
@@ -133,35 +155,58 @@ onMounted(fetchPortfolio)
           <div
             v-for="item in properties"
             :key="item.id"
-            class="border rounded p-3 d-flex align-items-center justify-content-between"
+            class="border rounded p-3"
           >
-            <div>
-              <RouterLink
-                :to="`/estates/${item.estate_id}`"
-                class="fw-semibold text-decoration-none"
-              >
-                {{ item.estate?.name ?? `عقار #${item.estate_id}` }}
-              </RouterLink>
-              <div class="small text-muted">
-                <span v-if="item.status === 'tracking'">قيد التتبّع</span>
-                <span v-else-if="item.status === 'invested'">مستثمر</span>
-                <span v-else-if="item.status === 'sold'">مباع</span>
-                <span v-if="item.investment_amount" class="me-2">
-                  — {{ formatPrice(item.investment_amount) }}
-                </span>
-                <span v-if="item.estate?.roi">
-                  ROI {{ (Number(item.estate.roi) * 100).toFixed(1) }}%
-                </span>
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <RouterLink
+                  :to="`/estates/${item.estate_id}`"
+                  class="fw-semibold text-decoration-none"
+                >
+                  {{ item.estate?.name ?? `عقار #${item.estate_id}` }}
+                </RouterLink>
+                <div class="small d-flex align-items-center gap-2 mt-1">
+                  <AppBadge :variant="statusLabel(item.status).cls">
+                    {{ statusLabel(item.status).text }}
+                  </AppBadge>
+                  <span v-if="item.investment_amount">
+                    — {{ formatPrice(item.investment_amount) }}
+                  </span>
+                  <span v-if="item.estate?.roi">
+                    ROI {{ (Number(item.estate.roi) * 100).toFixed(1) }}%
+                  </span>
+                </div>
               </div>
+              <TableActionGroup>
+                <TableAction
+                  v-if="!item.global_taken && item.status !== 'invested'"
+                  tone="success"
+                  icon="bi-check-circle"
+                  label="مستثمر"
+                  @click="updateItemStatus(item.id, 'invested')"
+                />
+                <TableAction
+                  v-if="!item.global_taken && item.status !== 'sold'"
+                  tone="warning"
+                  icon="bi-cash-coin"
+                  label="مباع"
+                  @click="updateItemStatus(item.id, 'sold')"
+                />
+                <TableAction
+                  v-if="!item.global_taken && item.status !== 'tracking'"
+                  tone="neutral"
+                  icon="bi-arrow-counterclockwise"
+                  label="قيد التتبّع"
+                  @click="updateItemStatus(item.id, 'tracking')"
+                />
+                <TableAction
+                  tone="danger"
+                  icon="bi-trash"
+                  label="إزالة"
+                  @click="removeItem(item.id)"
+                />
+              </TableActionGroup>
             </div>
-            <TableActionGroup>
-              <TableAction
-                tone="danger"
-                icon="bi-trash"
-                label="إزالة"
-                @click="removeItem(item.id)"
-              />
-            </TableActionGroup>
           </div>
         </div>
 

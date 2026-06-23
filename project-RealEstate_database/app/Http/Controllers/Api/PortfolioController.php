@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\Portfolio\DuplicatePortfolioItemException;
+use App\Exceptions\Portfolio\EstateAlreadyTakenException;
 use App\Exceptions\Portfolio\EstateNotPublishedException;
 use App\Exceptions\Portfolio\InvalidPortfolioStatusTransitionException;
 use App\Exceptions\Portfolio\PortfolioDomainException;
@@ -92,9 +93,10 @@ class PortfolioController extends BaseApiController
     private function mapDomainException(PortfolioDomainException|InvalidArgumentException $e): JsonResponse
     {
         $status = match (true) {
-            $e instanceof EstateNotPublishedException => 422,
-            $e instanceof DuplicatePortfolioItemException => 422,
-            $e instanceof InvalidPortfolioStatusTransitionException => 422,
+            $e instanceof EstateNotPublishedException,
+            $e instanceof DuplicatePortfolioItemException,
+            $e instanceof EstateAlreadyTakenException,
+            $e instanceof InvalidPortfolioStatusTransitionException,
             $e instanceof InvalidArgumentException => 422,
             default => 403,
         };

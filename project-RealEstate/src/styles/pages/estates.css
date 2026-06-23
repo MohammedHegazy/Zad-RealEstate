@@ -293,6 +293,28 @@
   margin: 1rem 0 2rem;
 }
 
+.estate-detail-page__header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.estate-detail-page__portfolio {
+  flex-shrink: 0;
+}
+
+.estate-detail-page__portfolio-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.estate-detail-page__portfolio-empty {
+  margin-top: 0.5rem;
+}
+
 .estate-detail-page__badges {
   display: flex;
   flex-wrap: wrap;
@@ -1001,5 +1023,9 @@
 
   .estates-map-page__results {
     max-height: none;
+  }
+
+  .estate-detail-page__header-main {
+    flex-direction: column;
   }
 }

@@ -28,11 +28,13 @@ use App\Http\Requests\StoreEstateRequest;
 use App\Http\Requests\UpdateEstateRequest;
 use App\Models\Agent;
 use App\Models\Estate;
+use App\Models\PortfolioProperty;
 use App\Services\EstateImageService;
 use App\Services\FileUploadService;
 use App\Services\Investment\InvestmentCalculatorService;
 use App\Services\SocialLinkService;
 use App\Traits\FormatsEstateResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -151,10 +153,35 @@ class EstateController extends BaseApiController
          */
         $estate->load(['place.city', 'user:id,username,fname,lname,country_code_phone', 'socialLinks', 'images', 'videos', 'ads']);
 
+        $metrics = $this->investmentCalculator->calculateForEstate($estate);
+        $data = $this->formatEstate($estate);
+        $data['expected_annual_income'] = $metrics->expectedAnnualIncome;
+        $data['roi'] = $metrics->roi;
+        $data['payback_period'] = $metrics->paybackPeriod;
+
         return $this->successResponse(
-            $this->formatEstate($estate),
+            $data,
             'Estate retrieved.',
         );
+    }
+
+    public function portfolioStatus(Request $request, Estate $estate): JsonResponse
+    {
+        $item = PortfolioProperty::query()
+            ->where('estate_id', $estate->id)
+            ->whereHas('portfolio', fn ($q) => $q->where('user_id', $request->user()->id))
+            ->first(['status']);
+
+        $globalTaken = PortfolioProperty::query()
+            ->where('estate_id', $estate->id)
+            ->whereIn('status', [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD])
+            ->exists();
+
+        return $this->successResponse([
+            'portfolio_status' => $item?->status,
+            'global_taken' => $globalTaken,
+            'can_add' => ! $globalTaken,
+        ]);
     }
 
     /** عقارات المستخدم المسجّل (كل الحالات) */
