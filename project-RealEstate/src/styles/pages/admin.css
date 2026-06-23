@@ -241,8 +241,8 @@
 
 /* Stat cards */
 .admin-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -255,6 +255,7 @@
   border: 1px solid var(--color-border-subtle);
   border-radius: 0.875rem;
   background-color: var(--color-surface);
+  flex: 0 0 auto;
 }
 
 .admin-stat-card__icon {

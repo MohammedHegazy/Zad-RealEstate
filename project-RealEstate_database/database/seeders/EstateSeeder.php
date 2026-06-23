@@ -31,7 +31,7 @@ class EstateSeeder extends Seeder
             'commercial' => ['office', 'shop', 'warehouse', 'building', 'mall'],
         ];
 
-        $statuses = ['active', 'active', 'active', 'active', 'pending', 'sold', 'rented'];
+        $statuses = ['active', 'active', 'active', 'active', 'pending', 'pending', 'rejected'];
 
         $index = 0;
 
