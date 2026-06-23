@@ -37,7 +37,7 @@ class EstateController extends BaseApiController
     public function index(Request $request): JsonResponse
     {
         $query = Estate::query()
-            ->with(['user:id,username,fname,lname', 'place:id,name,cities_id', 'images']);
+            ->with(['user:id,username,fname,lname,country_code_phone', 'place:id,name,cities_id', 'images']);
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);

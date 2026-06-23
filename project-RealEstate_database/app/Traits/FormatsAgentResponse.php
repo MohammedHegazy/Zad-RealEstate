@@ -60,7 +60,7 @@ trait FormatsAgentResponse
     /** حقول المستخدم الآمنة للعرض — only يستبعد password و tokens */
     protected function formatAgentUser(User $user): array
     {
-        return $user->only(['id', 'username', 'fname', 'lname', 'email', 'phone', 'type']);
+        return $user->only(['id', 'username', 'fname', 'lname', 'email', 'phone', 'country_code_phone', 'type']);
     }
 
     /** ملخص الشركة المرتبطة بالوسيط */

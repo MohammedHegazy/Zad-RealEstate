@@ -11,7 +11,7 @@ export function getUserName(user) {
 
 export function formatUserPhone(user) {
   if (!user?.phone) return null
-  const code = user.countre_code_phone ?? ''
+  const code = user.country_code_phone ?? ''
   return `${code} ${user.phone}`.trim()
 }
 

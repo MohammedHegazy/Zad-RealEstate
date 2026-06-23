@@ -111,7 +111,7 @@ class EstateController extends BaseApiController
     {
         $query = Estate::query()
             ->where('status', 'active')
-            ->with(['place.city', 'user:id,username,fname,lname', 'images']);
+            ->with(['place.city', 'user:id,username,fname,lname,country_code_phone', 'images']);
 
         $this->applyFilters($query, $request);
 
@@ -149,7 +149,7 @@ class EstateController extends BaseApiController
          * يقوم بتحميل العقار بناء على المعلومات المطلوبة
          *
          */
-        $estate->load(['place.city', 'user:id,username,fname,lname', 'socialLinks', 'images', 'videos', 'ads']);
+        $estate->load(['place.city', 'user:id,username,fname,lname,country_code_phone', 'socialLinks', 'images', 'videos', 'ads']);
 
         return $this->successResponse(
             $this->formatEstate($estate),

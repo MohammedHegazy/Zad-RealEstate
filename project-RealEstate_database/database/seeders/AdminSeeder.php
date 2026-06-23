@@ -23,7 +23,7 @@ class AdminSeeder extends Seeder
                 'is_verified' => true,
                 'password' => $this->demoPassword(),
                 'phone' => '0000000000',
-                'countre_code_phone' => '+963',
+                'country_code_phone' => '+963',
                 'gender' => 'other',
             ],
         );

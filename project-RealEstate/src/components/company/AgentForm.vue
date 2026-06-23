@@ -103,7 +103,7 @@ defineExpose({ handleSubmitError })
           <div>
             <strong>{{ user.fname }} {{ user.lname }}</strong>
             <br />
-            <small class="text-muted">{{ user.email }} — {{ user.phone }}</small>
+            <small class="text-muted">{{ user.email }} — <span dir="ltr">{{ user.country_code_phone ?? '' }} {{ user.phone }}</span></small>
           </div>
           <i class="bi bi-plus-circle"></i>
         </div>

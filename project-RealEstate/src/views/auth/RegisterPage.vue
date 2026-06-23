@@ -32,7 +32,7 @@ const form = reactive({
   password: '',
   password_confirmation: '',
   phone: '',
-  countre_code_phone: '+963',
+  country_code_phone: '+963',
   gender: '',
   type: 'buyer',
   facebook: '',
@@ -192,14 +192,14 @@ async function handleSubmit() {
           <AppFormGroup
             label="رمز الدولة"
             label-for="register-country-code"
-            :error="fieldError('countre_code_phone')"
+            :error="fieldError('country_code_phone')"
             required
           >
             <AppSelect
               id="register-country-code"
-              v-model="form.countre_code_phone"
+              v-model="form.country_code_phone"
               :options="COUNTRY_CODES"
-              :has-error="hasError('countre_code_phone')"
+              :has-error="hasError('country_code_phone')"
             />
           </AppFormGroup>
         </div>

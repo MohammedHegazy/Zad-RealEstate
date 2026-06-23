@@ -31,7 +31,7 @@ class CompanyController extends BaseApiController
 
     public function index(Request $request): JsonResponse
     {
-        $query = Companies::query()->with(['user:id,username,fname,lname', 'place:id,name,cities_id']);
+        $query = Companies::query()->with(['user:id,username,fname,lname,country_code_phone', 'place:id,name,cities_id']);
 
         if ($request->filled('search')) {
             $query->where('company_name', 'like', '%'.$request->search.'%');

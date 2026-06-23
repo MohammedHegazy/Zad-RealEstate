@@ -39,7 +39,7 @@ class CompanyController extends BaseApiController
     {
         $query = Companies::query()
             ->approved()
-            ->with(['place.city', 'user:id,username,fname,lname', 'socialLinks']);
+            ->with(['place.city', 'user:id,username,fname,lname,country_code_phone', 'socialLinks']);
 
         if ($request->filled('places_id')) {
             $query->where('places_id', $request->places_id);
@@ -73,7 +73,7 @@ class CompanyController extends BaseApiController
             return $this->notFoundResponse('You do not have a company profile.');
         }
 
-        $company->load(['place.city', 'socialLinks', 'agents.user:id,username,fname,lname']);
+        $company->load(['place.city', 'socialLinks', 'agents.user:id,username,fname,lname,country_code_phone']);
 
         return $this->successResponse(
             $this->formatCompany($company),
@@ -116,7 +116,7 @@ class CompanyController extends BaseApiController
         }
 
         return $this->successResponse(
-            $this->formatCompany($company->load(['place.city', 'user:id,username,fname,lname', 'socialLinks', 'agents.user'])),
+            $this->formatCompany($company->load(['place.city', 'user:id,username,fname,lname,country_code_phone', 'socialLinks', 'agents.user'])),
             'Company profile retrieved.',
         );
     }

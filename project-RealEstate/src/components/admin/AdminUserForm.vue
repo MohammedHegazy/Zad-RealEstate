@@ -38,7 +38,7 @@ const form = reactive({
   username: '',
   email: '',
   phone: '',
-  countre_code_phone: '+963',
+  country_code_phone: '+963',
   gender: 'male',
   type: 'buyer',
   status: 'active',
@@ -58,7 +58,7 @@ watch(
     form.username = user.username ?? ''
     form.email = user.email ?? ''
     form.phone = user.phone ?? ''
-    form.countre_code_phone = user.countre_code_phone ?? '+963'
+    form.country_code_phone = user.country_code_phone ?? '+963'
     form.gender = user.gender ?? 'male'
     form.type = user.type ?? 'buyer'
     form.status = user.status ?? 'active'
@@ -85,7 +85,7 @@ function handleSubmit() {
     username: form.username,
     email: form.email,
     phone: form.phone,
-    countre_code_phone: form.countre_code_phone,
+    country_code_phone: form.country_code_phone,
     gender: form.gender,
     type: form.type,
     status: form.status,
@@ -130,7 +130,7 @@ defineExpose({ handleSubmitError })
       </div>
       <div class="col-md-4">
         <AppFormGroup label="رمز الدولة" label-for="user-code">
-          <AppSelect id="user-code" v-model="form.countre_code_phone" :options="COUNTRY_CODES" />
+          <AppSelect id="user-code" v-model="form.country_code_phone" :options="COUNTRY_CODES" />
         </AppFormGroup>
       </div>
       <div class="col-md-8">

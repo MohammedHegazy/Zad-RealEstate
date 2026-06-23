@@ -45,11 +45,11 @@ const emit = defineEmits(['share'])
 
       <a
         v-if="agentPhone"
-        :href="`tel:${agentPhone}`"
+        :href="`tel:${agentPhone.replace(/\s/g, '')}`"
         class="app-btn app-btn--primary app-btn--md app-btn--block agent-sidebar__action"
       >
         <i class="bi bi-telephone"></i>
-        اتصال: {{ agentPhone }}
+        اتصال: <span dir="ltr">{{ agentPhone }}</span>
       </a>
 
       <a

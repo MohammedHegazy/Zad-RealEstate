@@ -178,6 +178,14 @@
   margin-bottom: 0.5rem;
 }
 
+.agent-sidebar__card .app-btn {
+  margin-bottom: 0.5rem;
+}
+
+.agent-sidebar__card .app-btn:last-child {
+  margin-bottom: 0;
+}
+
 .agent-sidebar__empty {
   margin: 0;
   color: var(--color-text-muted);

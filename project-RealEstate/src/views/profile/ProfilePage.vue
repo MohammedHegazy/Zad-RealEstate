@@ -31,7 +31,7 @@ const form = ref({
   username: '',
   email: '',
   phone: '',
-  countre_code_phone: '+963',
+  country_code_phone: '+963',
   gender: '',
 })
 
@@ -59,7 +59,7 @@ async function fetchProfile() {
       username: data.username ?? '',
       email: data.email ?? '',
       phone: data.phone ?? '',
-      countre_code_phone: data.countre_code_phone ?? '+963',
+      country_code_phone: data.country_code_phone ?? '+963',
       gender: data.gender ?? '',
     }
   } catch (err) {
@@ -83,7 +83,7 @@ function cancelEditing() {
     username: data.username ?? '',
     email: data.email ?? '',
     phone: data.phone ?? '',
-    countre_code_phone: data.countre_code_phone ?? '+963',
+    country_code_phone: data.country_code_phone ?? '+963',
     gender: data.gender ?? '',
   }
 }
@@ -98,7 +98,7 @@ async function saveProfile() {
       username: form.value.username,
       email: form.value.email,
       phone: form.value.phone,
-      countre_code_phone: form.value.countre_code_phone,
+      country_code_phone: form.value.country_code_phone,
       gender: form.value.gender || null,
     })
     profile.value = data
@@ -143,7 +143,7 @@ onMounted(fetchProfile)
             <span class="profile-card__type">{{ userTypeJourney.label }}</span>
             <p class="profile-card__email">{{ (profile ?? auth.user).email }}</p>
             <p v-if="(profile ?? auth.user).phone" class="profile-card__phone">
-              {{ (profile ?? auth.user).countre_code_phone }} {{ (profile ?? auth.user).phone }}
+              <span dir="ltr">{{ (profile ?? auth.user).country_code_phone ?? '' }} {{ (profile ?? auth.user).phone }}</span>
             </p>
           </div>
           <div v-if="!editing" class="profile-card__actions">
@@ -181,7 +181,7 @@ onMounted(fetchProfile)
             </div>
             <div class="col-md-4">
               <AppFormGroup label="مفتاح الدولة">
-                <AppSelect v-model="form.countre_code_phone" :options="COUNTRY_CODES" />
+                <AppSelect v-model="form.country_code_phone" :options="COUNTRY_CODES" />
               </AppFormGroup>
             </div>
             <div class="col-md-4">

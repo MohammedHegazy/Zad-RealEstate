@@ -25,7 +25,7 @@ const form = ref({
   username: '',
   email: '',
   phone: '',
-  countre_code_phone: '+963',
+  country_code_phone: '+963',
   gender: '',
 })
 
@@ -42,7 +42,7 @@ async function fetchProfile() {
       username: data.username ?? '',
       email: data.email ?? '',
       phone: data.phone ?? '',
-      countre_code_phone: data.countre_code_phone ?? '+963',
+      country_code_phone: data.country_code_phone ?? '+963',
       gender: data.gender ?? '',
     }
   } catch (err) {
@@ -62,7 +62,7 @@ async function saveProfile() {
       username: form.value.username,
       email: form.value.email,
       phone: form.value.phone,
-      countre_code_phone: form.value.countre_code_phone,
+      country_code_phone: form.value.country_code_phone,
       gender: form.value.gender || null,
     })
     profile.value = data
@@ -111,7 +111,7 @@ onMounted(fetchProfile)
         </div>
         <div class="col-md-4">
           <AppFormGroup label="مفتاح الدولة">
-            <AppSelect v-model="form.countre_code_phone" :options="COUNTRY_CODES" />
+            <AppSelect v-model="form.country_code_phone" :options="COUNTRY_CODES" />
           </AppFormGroup>
         </div>
         <div class="col-md-4">

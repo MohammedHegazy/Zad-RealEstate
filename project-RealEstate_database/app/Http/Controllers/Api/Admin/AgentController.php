@@ -53,7 +53,7 @@ class AgentController extends BaseApiController
 
     public function show(Agent $agent): JsonResponse
     {
-        $agent->load(['user', 'company', 'socialLinks', 'approvedReviews.user:id,username,fname,lname'])
+        $agent->load(['user', 'company', 'socialLinks', 'approvedReviews.user:id,username,fname,lname,country_code_phone'])
             ->loadAvg('approvedReviews', 'rating')
             ->loadCount('approvedReviews');
 

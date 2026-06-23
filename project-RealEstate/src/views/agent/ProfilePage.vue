@@ -97,7 +97,9 @@ onMounted(fetchProfile)
           </div>
           <div class="col-md-6">
             <AppFormGroup label="رقم الهاتف">
-              <AppInput :model-value="agent.user?.phone" readonly />
+              <p class="agent-profile__phone">
+                <span dir="ltr">{{ agent.user?.country_code_phone ?? '' }} {{ agent.user?.phone }}</span>
+              </p>
             </AppFormGroup>
           </div>
         </div>
@@ -148,3 +150,11 @@ onMounted(fetchProfile)
     </form>
   </div>
 </template>
+
+<style scoped>
+.agent-profile__phone {
+  padding: 0.5rem 0;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+</style>

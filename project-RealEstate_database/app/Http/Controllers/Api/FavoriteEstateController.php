@@ -26,7 +26,7 @@ class FavoriteEstateController extends BaseApiController
             ->with([
                 'estate.place.city',
                 'estate.images',
-                'estate.user:id,username,fname,lname',
+                'estate.user:id,username,fname,lname,country_code_phone',
             ]);
 
         if ($request->boolean('active_only')) {
@@ -82,7 +82,7 @@ class FavoriteEstateController extends BaseApiController
         $favoriteEstate->load([
             'estate.place.city',
             'estate.images',
-            'estate.user:id,username,fname,lname',
+            'estate.user:id,username,fname,lname,country_code_phone',
         ]);
 
         return $this->successResponse(
@@ -145,7 +145,7 @@ class FavoriteEstateController extends BaseApiController
         return $favorite->load([
             'estate.place.city',
             'estate.images',
-            'estate.user:id,username,fname,lname',
+            'estate.user:id,username,fname,lname,country_code_phone',
         ]);
     }
 

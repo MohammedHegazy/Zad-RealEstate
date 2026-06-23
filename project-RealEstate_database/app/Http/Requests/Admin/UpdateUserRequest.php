@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['sometimes', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'phone' => ['sometimes', 'string', 'max:50'],
-            'countre_code_phone' => ['sometimes', 'string', 'max:10'],
+            'country_code_phone' => ['sometimes', 'string', 'max:10'],
             'gender' => ['sometimes', 'string', 'max:20'],
             'type' => ['sometimes', 'string', Rule::in(config('realestate.user_types'))],
             'status' => ['sometimes', 'string', Rule::in(config('realestate.user_statuses'))],

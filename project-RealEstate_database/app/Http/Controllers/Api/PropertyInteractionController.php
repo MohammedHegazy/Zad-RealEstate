@@ -103,7 +103,7 @@ class PropertyInteractionController extends BaseApiController
             InteractionType::ContactAgent
         );
 
-        $estate->load('user:id,username,fname,lname,phone,email');
+        $estate->load('user:id,username,fname,lname,phone,email,country_code_phone');
 
         return $this->successResponse(
             [

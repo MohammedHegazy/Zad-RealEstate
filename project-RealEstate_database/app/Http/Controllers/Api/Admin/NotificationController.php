@@ -19,7 +19,7 @@ class NotificationController extends BaseApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Notifications::query()->with('user:id,username,email,fname,lname');
+        $query = Notifications::query()->with('user:id,username,email,fname,lname,country_code_phone');
 
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
@@ -52,7 +52,7 @@ class NotificationController extends BaseApiController
     public function show(Notifications $notification): JsonResponse
     {
         return $this->successResponse(
-            $notification->load('user:id,username,email,fname,lname,type'),
+            $notification->load('user:id,username,email,fname,lname,country_code_phone,type'),
             'Notification retrieved.',
         );
     }

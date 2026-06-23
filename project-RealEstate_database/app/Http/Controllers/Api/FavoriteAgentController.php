@@ -41,7 +41,7 @@ class FavoriteAgentController extends BaseApiController
             ->with([
                 'agent' => fn ($q) => $q
                     ->with([
-                        'user:id,username,fname,lname,email,phone,type',
+                        'user:id,username,fname,lname,email,phone,country_code_phone,type',
                         'company:id,company_name,places_id',
                     ])
                     ->withAvg('approvedReviews', 'rating')
@@ -111,7 +111,7 @@ class FavoriteAgentController extends BaseApiController
         $favoriteAgent->load([
             'agent' => fn ($q) => $q
                 ->with([
-                    'user:id,username,fname,lname,email,phone,type',
+                    'user:id,username,fname,lname,email,phone,country_code_phone,type',
                     'company:id,company_name,places_id',
                 ])
                 ->withAvg('approvedReviews', 'rating')
@@ -179,7 +179,7 @@ class FavoriteAgentController extends BaseApiController
         ]);
 
         $favorite->load([
-            'agent.user:id,username,fname,lname,email,phone,type',
+            'agent.user:id,username,fname,lname,email,phone,country_code_phone,type',
             'agent.company:id,company_name,places_id',
         ]);
         $favorite->agent?->loadAvg('approvedReviews', 'rating')->loadCount('approvedReviews');

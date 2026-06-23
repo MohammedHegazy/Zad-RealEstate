@@ -11,7 +11,17 @@ export function getAgentImage(agent) {
 }
 
 export function getAgentPhone(agent) {
-  return agent?.user?.phone ?? null
+  const user = agent?.user
+  if (!user?.phone) return null
+  const code = user.country_code_phone ?? ''
+  return `${code} ${user.phone}`.trim()
+}
+
+export function getAgentPhoneLink(agent) {
+  const user = agent?.user
+  if (!user?.phone) return null
+  const code = user.country_code_phone ?? ''
+  return `${code}${user.phone}`
 }
 
 export function getAgentEmail(agent) {

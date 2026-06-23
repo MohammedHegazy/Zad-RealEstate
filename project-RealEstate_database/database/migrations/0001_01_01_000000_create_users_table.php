@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone');
-            $table->string('countre_code_phone');
+            $table->string('country_code_phone');
             $table->string('gender');
             $table->rememberToken();
             $table->timestamps();

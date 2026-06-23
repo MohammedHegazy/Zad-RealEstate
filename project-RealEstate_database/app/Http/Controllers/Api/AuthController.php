@@ -25,7 +25,7 @@ class AuthController extends BaseApiController
             'email' => $request->email,//البريد الالكتروني
             'password' => $request->password,//كلمة المرور
             'phone' => $request->phone,//الهاتف
-            'countre_code_phone' => $request->countre_code_phone,//رمز الدولة للهاتف
+            'country_code_phone' => $request->country_code_phone,//رمز الدولة للهاتف
             'gender' => $request->gender,//الجنس
             'type' => $request->type,//النوع
             'status' => 'active',//الحالة

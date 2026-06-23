@@ -171,7 +171,7 @@ class DemoUserSeeder extends Seeder
                 'is_verified' => false,
                 'password' => $this->demoPassword(),
                 'phone' => fake()->numerify('##########'),
-                'countre_code_phone' => '+963',
+                'country_code_phone' => '+963',
                 'gender' => fake()->randomElement(['male', 'female']),
             ],
         );

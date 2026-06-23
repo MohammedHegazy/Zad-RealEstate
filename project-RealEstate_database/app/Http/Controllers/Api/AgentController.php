@@ -35,7 +35,7 @@ class AgentController extends BaseApiController
         $agent->increment('views');
         $agent->refresh();
 
-        $agent->load(['user:id,username,fname,lname,email,phone,type', 'company:id,company_name,places_id'])//لجلب بيانات المستخدم والشركة
+        $agent->load(['user:id,username,fname,lname,email,phone,country_code_phone,type', 'company:id,company_name,places_id'])//لجلب بيانات المستخدم والشركة
             ->loadAvg('approvedReviews', 'rating')//لجلب متوسط التقييمات الموثوق بها
             ->loadCount('approvedReviews');//لجلب عدد التقييمات الموثوق بها
 
@@ -70,7 +70,7 @@ class AgentController extends BaseApiController
             return $this->notFoundResponse('You do not have an agent profile.');//رسالة الخطأ
         }
 
-        $agent->load(['user:id,username,fname,lname,email,phone,type', 'company:id,company_name,places_id'])//لجلب بيانات المستخدم والشركة
+        $agent->load(['user:id,username,fname,lname,email,phone,country_code_phone,type', 'company:id,company_name,places_id'])//لجلب بيانات المستخدم والشركة
             ->loadAvg('approvedReviews', 'rating')//لجلب متوسط التقييمات الموثوق بها
             ->loadCount('approvedReviews');//لجلب عدد التقييمات الموثوق بها
 

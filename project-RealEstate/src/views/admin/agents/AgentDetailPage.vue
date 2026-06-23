@@ -122,7 +122,7 @@ async function handleDelete() {
             </p>
             <p v-if="agent.user?.phone">
               <i class="bi bi-telephone"></i>
-              {{ agent.user.phone }}
+              <span dir="ltr">{{ agent.user.country_code_phone ?? '' }} {{ agent.user.phone }}</span>
             </p>
           </div>
         </div>

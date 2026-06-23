@@ -141,7 +141,8 @@ async function toggleApproval(agent) {
         </template>
 
         <template #cell-phone="{ row }">
-          {{ row.user?.phone ?? '—' }}
+          <span dir="ltr" v-if="row.user?.phone">{{ row.user.country_code_phone ?? '' }} {{ row.user.phone }}</span>
+          <span v-else>—</span>
         </template>
 
         <template #cell-rating="{ row }">

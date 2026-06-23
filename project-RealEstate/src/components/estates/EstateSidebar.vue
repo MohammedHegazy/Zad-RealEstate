@@ -108,7 +108,7 @@ function handleShare() {
         class="app-btn app-btn--outline app-btn--md app-btn--block"
       >
         <i class="bi bi-telephone"></i>
-        {{ estate.country_code_phone }} {{ estate.phone }}
+        <span dir="ltr">{{ estate.country_code_phone ?? '' }} {{ estate.phone }}</span>
       </a>
 
       <AppButton variant="ghost" block @click="handleShare">

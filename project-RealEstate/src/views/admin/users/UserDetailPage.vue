@@ -78,7 +78,7 @@ async function handleDelete() {
         <span><i class="bi bi-at"></i> {{ user.username }}</span>
         <span v-if="formatUserPhone(user)">
           <i class="bi bi-telephone"></i>
-          {{ formatUserPhone(user) }}
+          <span dir="ltr">{{ formatUserPhone(user) }}</span>
         </span>
         <span><i class="bi bi-calendar3"></i> انضم {{ formatDate(user.created_at) }}</span>
       </div>

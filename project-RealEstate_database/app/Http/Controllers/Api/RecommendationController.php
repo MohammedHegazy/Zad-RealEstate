@@ -85,7 +85,7 @@ class RecommendationController extends BaseApiController
         //تحميل العقار المقترح
         $recommendation->load([
             'estate.place.city',
-            'estate.user:id,username,fname,lname',
+            'estate.user:id,username,fname,lname,country_code_phone',
         ]);
 
         return $this->successResponse(

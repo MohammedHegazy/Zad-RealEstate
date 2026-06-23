@@ -31,7 +31,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'countre_code_phone',
+        'country_code_phone',
         'gender',
         'last_activity_at',
     ];

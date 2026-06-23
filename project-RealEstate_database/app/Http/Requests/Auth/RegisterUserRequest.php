@@ -35,7 +35,7 @@ class RegisterUserRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['required', 'string', 'max:50'],
-            'countre_code_phone' => ['required', 'string', 'max:10'],
+            'country_code_phone' => ['required', 'string', 'max:10'],
             'gender' => ['required', 'string', 'max:20'],
             // type: يجب أن يكون من user_types وليس من admin_types
             'type' => ['required', 'string', Rule::in(config('realestate.user_types')), Rule::notIn($forbiddenTypes)],
