@@ -18,7 +18,7 @@ import { adminEstatesService } from '@/api/admin/estates.js'
 import { getErrorMessage } from '@/api/errorHandler.js'
 import { useAdminEstatesList } from '@/composables/useAdminEstatesList.js'
 import { formatPrice } from '@/composables/useFormatters.js'
-import { getEstateLocation, getEstateOwnerName } from '@/utils/estate.js'
+import { getEstateImage, getEstateLocation, getEstateOwnerName } from '@/utils/estate.js'
 import { useConfirmStore } from '@/stores/confirm.js'
 
 const actionLoading = ref(null)
@@ -44,6 +44,7 @@ const {
 } = useAdminEstatesList()
 
 const columns = [
+  { key: 'image', label: '' },
   { key: 'name', label: 'العقار' },
   { key: 'owner', label: 'المالك' },
   { key: 'place', label: 'الموقع' },
@@ -110,6 +111,14 @@ async function removeEstate(estate) {
       <p v-if="pagination?.total" class="admin-page__meta">{{ pagination.total }} عقار</p>
 
       <AdminDataTable :columns="columns" :rows="items">
+        <template #cell-image="{ row }">
+          <img
+            :src="getEstateImage(row)"
+            alt=""
+            class="admin-table__thumb"
+            loading="lazy"
+          />
+        </template>
         <template #cell-name="{ row }">
           <RouterLink :to="`/admin/estates/${row.id}`" class="admin-table__link">
             {{ row.name }}

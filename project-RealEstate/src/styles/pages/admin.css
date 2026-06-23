@@ -831,6 +831,14 @@
   color: var(--color-primary);
 }
 
+.admin-table__thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  display: block;
+}
+
 .admin-table__sub {
   display: flex;
   align-items: center;
@@ -947,6 +955,12 @@
 }
 
 .admin-estate-form__actions {
+  margin-top: 0.5rem;
+}
+
+.admin-company-form__actions {
+  display: flex;
+  gap: 0.75rem;
   margin-top: 0.5rem;
 }
 
@@ -1685,6 +1699,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .admin-estate-media__card {
@@ -1722,26 +1737,29 @@
   padding: 0.5rem;
 }
 
-.admin-estate-media__videos {
-  display: grid;
-  gap: 1rem;
+.admin-estate-media__card--video {
+  cursor: default;
 }
 
-.admin-estate-media__video {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.admin-estate-media__video video {
+.admin-estate-media__video-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  max-height: 240px;
-  border-radius: 0.75rem;
-  background-color: #000;
+  aspect-ratio: 4 / 3;
+  background-color: #1a1a2e;
+}
+
+.admin-estate-media__play-icon {
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 }
 
 .admin-estate-media__empty,
 .admin-estate-media__error {
   margin: 0;
+  margin-top: 0.75rem;
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }

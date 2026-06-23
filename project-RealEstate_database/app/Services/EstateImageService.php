@@ -24,10 +24,24 @@ class EstateImageService
 
             $path = $this->uploader->storeImage($file, 'estates/'.$estate->id);
 
+            $maxSort = $estate->images()->max('sort_order') ?? 0;
+
             return $estate->images()->create([
                 'image' => $path,
                 'is_primary' => $isPrimary,
+                'sort_order' => $maxSort + 1,
             ]);
+        });
+    }
+
+    public function reorderImages(Estate $estate, array $imageIds): void
+    {
+        DB::transaction(function () use ($estate, $imageIds) {
+            foreach ($imageIds as $index => $id) {
+                $estate->images()
+                    ->where('id', $id)
+                    ->update(['sort_order' => $index + 1]);
+            }
         });
     }
 

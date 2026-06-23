@@ -16,9 +16,23 @@ class EstateAdController extends BaseApiController
 
     public function index(Estate $estate): JsonResponse
     {
-        $ads = $estate->ads()->latest()->get()->map(fn (EstateAd $ad) => $this->formatEstateAd($ad));
+        $ads = $estate->ads()->orderBy('sort_order')->orderBy('id')->get()->map(fn (EstateAd $ad) => $this->formatEstateAd($ad));
 
         return $this->successResponse($ads, 'Estate ads retrieved.');
+    }
+
+    public function reorder(Request $request, Estate $estate): JsonResponse
+    {
+        $request->validate([
+            'ad_ids' => ['required', 'array'],
+            'ad_ids.*' => ['integer', 'exists:estate_ads,id'],
+        ]);
+
+        foreach ($request->input('ad_ids') as $index => $id) {
+            $estate->ads()->where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+
+        return $this->successResponse(null, 'Ads reordered successfully.');
     }
 
     public function store(StoreEstateAdRequest $request, Estate $estate): JsonResponse

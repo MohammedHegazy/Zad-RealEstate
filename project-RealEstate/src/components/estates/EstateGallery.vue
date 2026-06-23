@@ -74,12 +74,11 @@ function selectMedia(index) {
           :alt="`${estate.name} - ${index + 1}`"
           loading="lazy"
         />
-        <template v-else>
-          <video :src="item.video_url" preload="metadata" muted></video>
+        <span v-else class="estate-gallery__video-thumb">
           <span class="estate-gallery__play-icon">
             <i class="bi bi-play-circle-fill"></i>
           </span>
-        </template>
+        </span>
       </button>
     </div>
   </div>

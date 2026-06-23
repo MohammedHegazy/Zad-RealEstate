@@ -73,66 +73,7 @@ const form = ref({
   instagram: props.initialData?.social_links?.find((l) => l.platform === 'instagram')?.url ?? '',
 })
 
-const pendingImages = ref([])
-const pendingVideos = ref([])
-const pendingAds = ref([])
-const primaryImageIndex = ref(0)
-const mainAdIndex = ref(0)
 
-function removePendingFile(listRef, index, adjustPrimaryRef = null) {
-  listRef.value.splice(index, 1)
-  if (adjustPrimaryRef && adjustPrimaryRef.value >= listRef.value.length) {
-    adjustPrimaryRef.value = Math.max(0, listRef.value.length - 1)
-  }
-}
-
-function previewUrl(file) {
-  return URL.createObjectURL(file)
-}
-
-const dragIndex = ref(null)
-const dragOverIndex = ref(-1)
-
-function onDragStart(index) {
-  dragIndex.value = index
-}
-
-function onDragOver(e, index) {
-  e.preventDefault()
-  dragOverIndex.value = index
-}
-
-function onDragLeave() {
-  dragOverIndex.value = -1
-}
-
-function onDrop(list, index, primaryRef) {
-  if (dragIndex.value === null || dragIndex.value === index) {
-    clearDragState()
-    return
-  }
-  const from = dragIndex.value
-  const to = index
-  const item = list.value.splice(from, 1)[0]
-  list.value.splice(to, 0, item)
-
-  if (primaryRef) {
-    if (primaryRef.value === from) {
-      primaryRef.value = to
-    } else if (from < primaryRef.value && to >= primaryRef.value) {
-      primaryRef.value--
-    } else if (from > primaryRef.value && to <= primaryRef.value) {
-      primaryRef.value++
-    }
-  }
-
-  clearDragState()
-}
-
-function clearDragState() {
-  dragIndex.value = null
-  dragOverIndex.value = -1
-}
 
 const cityOptions = computed(() =>
   cities.value.map((c) => ({ value: String(c.id), label: c.name }))
@@ -201,6 +142,67 @@ function removeSocialLink(index) {
   if (editingLinkIndex.value === index) cancelEditLink()
 }
 
+const pendingImages = ref([])
+const pendingVideos = ref([])
+const pendingAds = ref([])
+const primaryImageIndex = ref(0)
+const mainAdIndex = ref(0)
+
+function removePendingFile(listRef, index, adjustPrimaryRef = null) {
+  listRef.value.splice(index, 1)
+  if (adjustPrimaryRef && adjustPrimaryRef.value >= listRef.value.length) {
+    adjustPrimaryRef.value = Math.max(0, listRef.value.length - 1)
+  }
+}
+
+function previewUrl(file) {
+  return URL.createObjectURL(file)
+}
+
+const dragIndex = ref(null)
+const dragOverIndex = ref(-1)
+
+function onDragStart(index) {
+  dragIndex.value = index
+}
+
+function onDragOver(e, index) {
+  e.preventDefault()
+  dragOverIndex.value = index
+}
+
+function onDragLeave() {
+  dragOverIndex.value = -1
+}
+
+function onDrop(list, index, primaryRef) {
+  if (dragIndex.value === null || dragIndex.value === index) {
+    clearDragState()
+    return
+  }
+  const from = dragIndex.value
+  const to = index
+  const item = list.value.splice(from, 1)[0]
+  list.value.splice(to, 0, item)
+
+  if (primaryRef) {
+    if (primaryRef.value === from) {
+      primaryRef.value = to
+    } else if (from < primaryRef.value && to >= primaryRef.value) {
+      primaryRef.value--
+    } else if (from > primaryRef.value && to <= primaryRef.value) {
+      primaryRef.value++
+    }
+  }
+
+  clearDragState()
+}
+
+function clearDragState() {
+  dragIndex.value = null
+  dragOverIndex.value = -1
+}
+
 function handleSubmit() {
   clearErrors()
   const formData = new FormData()
@@ -219,11 +221,17 @@ function handleSubmit() {
     formData.append(`links[${i}][platform]`, link.platform)
     formData.append(`links[${i}][url]`, link.url)
   })
-  pendingImages.value.forEach((file) => formData.append('images[]', file))
-  pendingVideos.value.forEach((file) => formData.append('videos[]', file))
-  pendingAds.value.forEach((file) => formData.append('ads[]', file))
-  formData.append('primary_image_index', String(primaryImageIndex.value))
-  formData.append('main_ad_index', String(mainAdIndex.value))
+  if (!props.initialData) {
+    pendingImages.value.forEach((file) => formData.append('images[]', file))
+    if (pendingImages.value.length) {
+      formData.append('primary_image_index', primaryImageIndex.value)
+    }
+    pendingVideos.value.forEach((file) => formData.append('videos[]', file))
+    pendingAds.value.forEach((file) => formData.append('ads[]', file))
+    if (pendingAds.value.length) {
+      formData.append('main_ad_index', mainAdIndex.value)
+    }
+  }
   emit('submit', formData)
 }
 
@@ -534,12 +542,15 @@ defineExpose({ handleSubmitError })
       </div>
     </div>
 
-    <div class="admin-company-form__section">
-      <h3 class="admin-company-form__section-title">الوسائط (اختياري)</h3>
-      <p class="text-muted small">يمكنك رفع الصور والفيديوهات وصور الإعلانات مع إنشاء العقار، أو إضافتها لاحقاً من صفحة التعديل.</p>
+
+
+    <div v-if="!initialData" class="admin-estate-form__section">
+      <h4 class="admin-estate-form__section-title">الوسائط (اختياري)</h4>
+      <p class="admin-estate-form__media-hint">
+        يمكنك رفع الصور والفيديوهات وصور الإعلانات مع إنشاء العقار، أو إضافتها لاحقاً من صفحة التعديل.
+      </p>
 
       <div class="admin-estate-form__media-block">
-        <h5>معرض الصور</h5>
         <AppFileUpload
           accept="image/*"
           multiple
@@ -584,19 +595,10 @@ defineExpose({ handleSubmitError })
             </div>
           </article>
         </div>
-        <p v-if="!pendingImages.length && !initialData?.images?.length" class="admin-estate-form__media-empty">لا توجد صور مرفقة.</p>
-        <div v-if="initialData?.images?.length" class="mt-2">
-          <label class="app-form-group__label">الصور الحالية ({{ initialData.images.length }})</label>
-          <div class="admin-estate-form__previews">
-            <div v-for="img in initialData.images" :key="img.id" class="admin-estate-form__preview-item">
-              <img :src="img.image_url" alt="Estate image" />
-            </div>
-          </div>
-        </div>
+        <p v-else class="admin-estate-form__media-empty">لا توجد صور مرفقة.</p>
       </div>
 
       <div class="admin-estate-form__media-block">
-        <h5>الفيديوهات</h5>
         <AppFileUpload
           accept="video/*"
           multiple
@@ -620,19 +622,10 @@ defineExpose({ handleSubmitError })
             </AppButton>
           </article>
         </div>
-        <p v-if="!pendingVideos.length && !initialData?.videos?.length" class="admin-estate-form__media-empty">لا توجد فيديوهات مرفقة.</p>
-        <div v-if="initialData?.videos?.length" class="mt-2">
-          <label class="app-form-group__label">الفيديوهات الحالية ({{ initialData.videos.length }})</label>
-          <div class="admin-estate-form__media-videos">
-            <article v-for="vid in initialData.videos" :key="vid.id" class="admin-estate-form__media-video">
-              <video :src="vid.video_url || vid.video" controls preload="metadata"></video>
-            </article>
-          </div>
-        </div>
+        <p v-else class="admin-estate-form__media-empty">لا توجد فيديوهات مرفقة.</p>
       </div>
 
       <div class="admin-estate-form__media-block">
-        <h5>صور الإعلانات</h5>
         <AppFileUpload
           accept="image/*"
           multiple
@@ -677,15 +670,7 @@ defineExpose({ handleSubmitError })
             </div>
           </article>
         </div>
-        <p v-if="!pendingAds.length && !initialData?.ads?.length" class="admin-estate-form__media-empty">لا توجد صور إعلانات مرفقة.</p>
-        <div v-if="initialData?.ads?.length" class="mt-2">
-          <label class="app-form-group__label">الإعلانات الحالية ({{ initialData.ads.length }})</label>
-          <div class="admin-estate-form__media-grid">
-            <div v-for="ad in initialData.ads" :key="ad.id" class="admin-estate-form__media-card">
-              <img :src="ad.image_url || ad.image" alt="Ad image" />
-            </div>
-          </div>
-        </div>
+        <p v-else class="admin-estate-form__media-empty">لا توجد صور إعلانات مرفقة.</p>
       </div>
     </div>
 

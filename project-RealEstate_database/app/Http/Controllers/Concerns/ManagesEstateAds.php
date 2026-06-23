@@ -51,9 +51,12 @@ trait ManagesEstateAds
             $estate->ads()->update(['is_main' => false]);
         }
 
+        $maxSort = $estate->ads()->max('sort_order') ?? 0;
+
         return $estate->ads()->create([
             'image' => $path,
             'is_main' => $isMain,
+            'sort_order' => $maxSort + 1,
         ]);
     }
 

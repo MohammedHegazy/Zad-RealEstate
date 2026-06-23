@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref } from 'vue'
 import AdminDataTable from '@/components/admin/AdminDataTable.vue'
 import AdminPageHeader from '@/components/admin/AdminPageHeader.vue'
 import AppButton from '@/components/ui/AppButton.vue'
@@ -11,69 +11,34 @@ import Pagination from '@/components/ui/Pagination.vue'
 import StatusBadge from '@/components/admin/StatusBadge.vue'
 import TableAction from '@/components/ui/TableAction.vue'
 import TableActionGroup from '@/components/ui/TableActionGroup.vue'
-import { ESTATE_STATUS_LABELS, ESTATE_STATUS_OPTIONS, ADMIN_ESTATE_TYPE_OPTIONS, ADMIN_ESTATE_KIND_OPTIONS } from '@/config/admin.js'
+import { ESTATE_STATUS_LABELS } from '@/config/admin.js'
 import { companyService } from '@/api/company.js'
 import { myEstatesService } from '@/api/myEstates.js'
 import { formatPrice } from '@/composables/useFormatters.js'
-import { getErrorMessage } from '@/api/errorHandler.js'
+import { useCompanyEstatesList } from '@/composables/useCompanyEstatesList.js'
 import { useConfirmStore } from '@/stores/confirm.js'
+import { getEstateImage } from '@/utils/estate.js'
 
 const deletingId = ref(null)
 const confirmStore = useConfirmStore()
-const loading = ref(false)
-const error = ref(null)
-const items = ref([])
-const pagination = ref(null)
-const search = ref('')
-const statusFilter = ref('')
-const typeFilter = ref('')
-const kindFilter = ref('')
 
-async function fetchItems() {
-  loading.value = true
-  error.value = null
-  try {
-    const params = { per_page: 15 }
-    if (search.value) params.search = search.value
-    if (statusFilter.value) params.status = statusFilter.value
-    if (typeFilter.value) params.type_text = typeFilter.value
-    if (kindFilter.value) params.kind_text = kindFilter.value
-    const { data, pagination: pag } = await companyService.allEstates(params)
-    items.value = data ?? []
-    pagination.value = pag ?? null
-  } catch (err) {
-    error.value = getErrorMessage(err, 'تعذّر تحميل العقارات.')
-  } finally {
-    loading.value = false
-  }
-}
-
-const statusFilterOptions = computed(() => [
-  { value: '', label: 'كل الحالات' },
-  ...ESTATE_STATUS_OPTIONS,
-])
-
-const typeFilterOptions = computed(() => [
-  { value: '', label: 'كل الفئات' },
-  ...ADMIN_ESTATE_TYPE_OPTIONS,
-])
-
-const kindFilterOptions = computed(() => [
-  { value: '', label: 'كل الأنواع' },
-  ...ADMIN_ESTATE_KIND_OPTIONS,
-])
-
-const hasActiveFilters = computed(() =>
-  Boolean(search.value || statusFilter.value || typeFilter.value || kindFilter.value),
-)
-
-function clearFilters() {
-  search.value = ''
-  statusFilter.value = ''
-  typeFilter.value = ''
-  kindFilter.value = ''
-  fetchItems()
-}
+const {
+  loading,
+  error,
+  items,
+  pagination,
+  fetchItems,
+  goToPage,
+  search,
+  statusFilter,
+  typeFilter,
+  kindFilter,
+  hasActiveFilters,
+  clearFilters,
+  statusFilterOptions,
+  typeFilterOptions,
+  kindFilterOptions,
+} = useCompanyEstatesList((params) => companyService.allEstates(params))
 
 async function deleteEstate(id) {
   if (!(await confirmStore.show({ message: 'هل أنت متأكد من حذف هذا العقار؟ لا يمكن التراجع عن هذا الإجراء.' }))) return
@@ -85,8 +50,6 @@ async function deleteEstate(id) {
     deletingId.value = null
   }
 }
-
-onMounted(fetchItems)
 </script>
 
 <template>
@@ -124,6 +87,7 @@ onMounted(fetchItems)
 
       <AdminDataTable
         :columns="[
+          { key: 'image', label: '' },
           { key: 'name', label: 'الاسم' },
           { key: 'owner', label: 'المالك' },
           { key: 'price', label: 'السعر' },
@@ -134,6 +98,14 @@ onMounted(fetchItems)
         :rows="items"
         empty-message="لا توجد عقارات بعد."
       >
+        <template #cell-image="{ row }">
+          <img
+            :src="getEstateImage(row)"
+            alt=""
+            class="admin-table__thumb"
+            loading="lazy"
+          />
+        </template>
         <template #cell-name="{ row }">
           <strong>{{ row.name }}</strong>
         </template>
@@ -184,7 +156,7 @@ onMounted(fetchItems)
         :current-page="pagination.current_page"
         :last-page="pagination.last_page"
         :total="pagination.total"
-        @page-change="(page) => { pagination.current_page = page; fetchItems() }"
+        @page-change="goToPage"
       />
     </template>
   </div>

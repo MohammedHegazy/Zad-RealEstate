@@ -16,6 +16,7 @@ import { myEstatesService } from '@/api/myEstates.js'
 import { formatPrice } from '@/composables/useFormatters.js'
 import { useCompanyEstatesList } from '@/composables/useCompanyEstatesList.js'
 import { useConfirmStore } from '@/stores/confirm.js'
+import { getEstateImage } from '@/utils/estate.js'
 
 const deletingId = ref(null)
 const confirmStore = useConfirmStore()
@@ -85,6 +86,7 @@ async function deleteEstate(id) {
 
       <AdminDataTable
         :columns="[
+          { key: 'image', label: '' },
           { key: 'name', label: 'الاسم' },
           { key: 'price', label: 'السعر' },
           { key: 'type', label: 'النوع' },
@@ -94,6 +96,14 @@ async function deleteEstate(id) {
         :rows="items"
         empty-message="لا تملك أي عقارات بعد."
       >
+        <template #cell-image="{ row }">
+          <img
+            :src="getEstateImage(row)"
+            alt=""
+            class="admin-table__thumb"
+            loading="lazy"
+          />
+        </template>
         <template #cell-name="{ row }">
           <strong>{{ row.name }}</strong>
         </template>

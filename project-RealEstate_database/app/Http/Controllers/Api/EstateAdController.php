@@ -37,7 +37,7 @@ class EstateAdController extends BaseApiController
             return $this->notFoundResponse('Estate not found.');
         }
 
-        $ads = $estate->ads()->latest()->get()->map(fn (EstateAd $ad) => $this->formatEstateAd($ad));
+        $ads = $estate->ads()->orderBy('sort_order')->orderBy('id')->get()->map(fn (EstateAd $ad) => $this->formatEstateAd($ad));
 
         return $this->successResponse($ads, 'Estate ads retrieved.');
     }
@@ -79,6 +79,24 @@ class EstateAdController extends BaseApiController
             $this->formatEstateAd($ad->fresh()),
             'Main ad image updated.',
         );
+    }
+
+    public function reorder(Request $request, Estate $estate): JsonResponse
+    {
+        if (! $this->isOwner($request, $estate)) {
+            return $this->notFoundResponse('Estate not found.');
+        }
+
+        $request->validate([
+            'ad_ids' => ['required', 'array'],
+            'ad_ids.*' => ['integer', 'exists:estate_ads,id'],
+        ]);
+
+        foreach ($request->input('ad_ids') as $index => $id) {
+            $estate->ads()->where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+
+        return $this->successResponse(null, 'Ads reordered successfully.');
     }
 
     public function destroy(Request $request, Estate $estate, EstateAd $ad): JsonResponse

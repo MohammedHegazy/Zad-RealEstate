@@ -11,7 +11,7 @@ import {
 
 const SEARCH_DEBOUNCE_MS = 400
 
-export function useCompanyEstatesList() {
+export function useCompanyEstatesList(fetchFn) {
   const route = useRoute()
   const router = useRouter()
   const search = ref(route.query.search?.toString() ?? '')
@@ -49,8 +49,10 @@ export function useCompanyEstatesList() {
     set: (value) => updateQuery({ kind_text: value || undefined }),
   })
 
+  const actualFetch = fetchFn || ((params) => myEstatesService.list(params))
+
   const { loading, error, items, pagination, fetchItems, goToPage } = usePaginatedList(
-    (params) => myEstatesService.list(params),
+    (params) => actualFetch(params),
     {
       perPage: 15,
       extraParams: (currentRoute) => {

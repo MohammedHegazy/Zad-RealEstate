@@ -4,6 +4,7 @@ import { computed, ref, watch } from 'vue'
 import AppFileUpload from '@/components/ui/AppFileUpload.vue'
 import TableAction from '@/components/ui/TableAction.vue'
 import TableActionGroup from '@/components/ui/TableActionGroup.vue'
+import VideoPlayerModal from '@/components/ui/VideoPlayerModal.vue'
 import { adminEstatesService } from '@/api/admin/estates.js'
 import { getErrorMessage } from '@/api/errorHandler.js'
 import { useConfirmStore } from '@/stores/confirm.js'
@@ -12,6 +13,10 @@ const props = defineProps({
   estate: {
     type: Object,
     required: true,
+  },
+  service: {
+    type: Object,
+    default: () => adminEstatesService,
   },
 })
 
@@ -27,6 +32,7 @@ const localAds = computed(() => props.estate.ads ?? [])
 const dragIndex = ref(null)
 const dragOverIndex = ref(-1)
 
+const selectedVideoUrl = ref('')
 const pendingImages = ref([])
 const pendingVideos = ref([])
 const pendingAds = ref([])
@@ -41,7 +47,7 @@ watch(pendingImages, async (files) => {
       const formData = new FormData()
       formData.append('image', files[i])
       formData.append('is_primary', (noExisting && i === 0) ? '1' : '0')
-      await adminEstatesService.uploadImage(props.estate.id, formData)
+      await props.service.uploadImage(props.estate.id, formData)
     }
     emit('updated')
   } catch (err) {
@@ -60,7 +66,7 @@ watch(pendingVideos, async (files) => {
     for (const file of files) {
       const formData = new FormData()
       formData.append('video', file)
-      await adminEstatesService.uploadVideo(props.estate.id, formData)
+      await props.service.uploadVideo(props.estate.id, formData)
     }
     emit('updated')
   } catch (err) {
@@ -81,7 +87,7 @@ watch(pendingAds, async (files) => {
       const formData = new FormData()
       formData.append('image', files[i])
       formData.append('is_main', (noExisting && i === 0) ? '1' : '0')
-      await adminEstatesService.uploadAd(props.estate.id, formData)
+      await props.service.uploadAd(props.estate.id, formData)
     }
     emit('updated')
   } catch (err) {
@@ -107,34 +113,34 @@ async function runAction(key, action) {
 
 function setPrimary(imageId) {
   return runAction(`primary-${imageId}`, () =>
-    adminEstatesService.setPrimaryImage(props.estate.id, imageId),
+    props.service.setPrimaryImage(props.estate.id, imageId),
   )
 }
 
 async function removeImage(imageId) {
   if (!(await confirmStore.show({ message: 'حذف هذه الصورة؟' }))) return
   return runAction(`delete-image-${imageId}`, () =>
-    adminEstatesService.removeImage(props.estate.id, imageId),
+    props.service.removeImage(props.estate.id, imageId),
   )
 }
 
 async function removeVideo(videoId) {
   if (!(await confirmStore.show({ message: 'حذف هذا الفيديو؟' }))) return
   return runAction(`delete-video-${videoId}`, () =>
-    adminEstatesService.removeVideo(props.estate.id, videoId),
+    props.service.removeVideo(props.estate.id, videoId),
   )
 }
 
 function setMainAd(adId) {
   return runAction(`main-ad-${adId}`, () =>
-    adminEstatesService.setMainAd(props.estate.id, adId),
+    props.service.setMainAd(props.estate.id, adId),
   )
 }
 
 async function removeAd(adId) {
   if (!(await confirmStore.show({ message: 'حذف صورة الإعلان؟' }))) return
   return runAction(`delete-ad-${adId}`, () =>
-    adminEstatesService.removeAd(props.estate.id, adId),
+    props.service.removeAd(props.estate.id, adId),
   )
 }
 
@@ -152,6 +158,7 @@ function onDragLeave() {
 }
 
 function onDropImages(index) {
+  if (!props.service.reorderImages) return
   if (dragIndex.value === null || dragIndex.value === index) {
     clearDragState()
     return
@@ -163,11 +170,12 @@ function onDropImages(index) {
   images.splice(to, 0, item)
   clearDragState()
   runAction('reorder-images', () =>
-    adminEstatesService.reorderImages(props.estate.id, images.map((img) => img.id)),
+    props.service.reorderImages(props.estate.id, images.map((img) => img.id)),
   )
 }
 
 function onDropAds(index) {
+  if (!props.service.reorderAds) return
   if (dragIndex.value === null || dragIndex.value === index) {
     clearDragState()
     return
@@ -179,7 +187,7 @@ function onDropAds(index) {
   ads.splice(to, 0, item)
   clearDragState()
   runAction('reorder-ads', () =>
-    adminEstatesService.reorderAds(props.estate.id, ads.map((ad) => ad.id)),
+    props.service.reorderAds(props.estate.id, ads.map((ad) => ad.id)),
   )
 }
 
@@ -213,7 +221,7 @@ function clearDragState() {
             'admin-estate-media__card--primary': image.is_primary,
             'admin-estate-media__card--drag-over': dragOverIndex === index,
           }"
-          draggable="true"
+          :draggable="Boolean(props.service.reorderImages)"
           @dragstart="onDragStart(index)"
           @dragover="(e) => onDragOver(e, index)"
           @dragleave="onDragLeave"
@@ -254,15 +262,19 @@ function clearDragState() {
         v-model="pendingVideos"
       />
 
-      <div v-if="estate.videos?.length" class="admin-estate-media__videos">
-        <article v-for="video in estate.videos" :key="video.id" class="admin-estate-media__video">
-          <video :src="video.video_url" controls preload="metadata"></video>
-          <TableAction
-            tone="danger"
-            label="حذف"
-            :disabled="Boolean(loading)"
-            @click="removeVideo(video.id)"
-          />
+      <div v-if="estate.videos?.length" class="admin-estate-media__grid">
+        <article v-for="video in estate.videos" :key="video.id" class="admin-estate-media__card admin-estate-media__card--video" role="button" tabindex="0" @click="selectedVideoUrl = video.video_url" @keydown.enter="selectedVideoUrl = video.video_url">
+          <span class="admin-estate-media__video-thumb">
+            <i class="bi bi-play-circle-fill admin-estate-media__play-icon"></i>
+          </span>
+          <div class="admin-estate-media__card-actions">
+            <TableAction
+              tone="danger"
+              label="حذف"
+              :disabled="Boolean(loading)"
+              @click="removeVideo(video.id)"
+            />
+          </div>
         </article>
       </div>
       <p v-else class="admin-estate-media__empty">لا توجد فيديوهات.</p>
@@ -288,7 +300,7 @@ function clearDragState() {
             'admin-estate-media__card--primary': ad.is_main,
             'admin-estate-media__card--drag-over': dragOverIndex === index,
           }"
-          draggable="true"
+          :draggable="Boolean(props.service.reorderAds)"
           @dragstart="onDragStart(index)"
           @dragover="(e) => onDragOver(e, index)"
           @dragleave="onDragLeave"
@@ -317,5 +329,11 @@ function clearDragState() {
       </div>
       <p v-else class="admin-estate-media__empty">لا توجد صور إعلانات.</p>
     </section>
+
+    <VideoPlayerModal
+      :show="Boolean(selectedVideoUrl)"
+      :video-url="selectedVideoUrl"
+      @close="selectedVideoUrl = ''"
+    />
   </div>
 </template>

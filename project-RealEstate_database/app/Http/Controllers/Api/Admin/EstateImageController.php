@@ -16,6 +16,7 @@ use App\Models\Estate;
 use App\Models\EstateImage;
 use App\Services\EstateImageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use InvalidArgumentException;
 
 class EstateImageController extends BaseApiController
@@ -28,7 +29,7 @@ class EstateImageController extends BaseApiController
 
     public function index(Estate $estate): JsonResponse
     {
-        $images = $estate->images()->latest()->get()->map(fn (EstateImage $img) => $this->formatEstateImage($img, $this->images));
+        $images = $estate->images()->orderBy('sort_order')->orderBy('id')->get()->map(fn (EstateImage $img) => $this->formatEstateImage($img, $this->images));
 
         return $this->successResponse($images, 'Estate images retrieved.');
     }
@@ -59,6 +60,18 @@ class EstateImageController extends BaseApiController
             $this->formatEstateImage($image, $this->images),
             'Primary image updated.',
         );
+    }
+
+    public function reorder(Request $request, Estate $estate): JsonResponse
+    {
+        $request->validate([
+            'image_ids' => ['required', 'array'],
+            'image_ids.*' => ['integer', 'exists:estate_images,id'],
+        ]);
+
+        $this->images->reorderImages($estate, $request->input('image_ids'));
+
+        return $this->successResponse(null, 'Images reordered successfully.');
     }
 
     public function destroy(Estate $estate, EstateImage $image): JsonResponse

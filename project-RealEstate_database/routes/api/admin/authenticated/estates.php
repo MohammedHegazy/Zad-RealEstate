@@ -25,6 +25,7 @@ Route::prefix('estates')->name('estates.')->group(function () {
         Route::prefix('images')->name('images.')->group(function () {
             Route::get('/', [EstateImageController::class, 'index'])->name('index');
             Route::post('/', [EstateImageController::class, 'store'])->name('store');
+            Route::post('reorder', [EstateImageController::class, 'reorder'])->name('reorder');
             Route::patch('{image}/primary', [EstateImageController::class, 'setPrimary'])->name('primary');
             Route::delete('{image}', [EstateImageController::class, 'destroy'])->name('destroy');
         });
@@ -38,6 +39,7 @@ Route::prefix('estates')->name('estates.')->group(function () {
         Route::prefix('ads')->name('ads.')->group(function () {
             Route::get('/', [EstateAdController::class, 'index'])->name('index');
             Route::post('/', [EstateAdController::class, 'store'])->name('store');
+            Route::post('reorder', [EstateAdController::class, 'reorder'])->name('reorder');
             Route::patch('{ad}/main', [EstateAdController::class, 'setMain'])->name('main');
             Route::delete('{ad}', [EstateAdController::class, 'destroy'])->name('destroy');
         });
