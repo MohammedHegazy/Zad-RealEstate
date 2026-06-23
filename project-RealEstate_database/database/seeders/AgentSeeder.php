@@ -11,7 +11,7 @@ class AgentSeeder extends Seeder
 {
     public function run(): void
     {
-        $agentUsers = User::query()->where('type', 'agent')->orderBy('id')->get();
+        $agentUsers = User::query()->where('type', 'agent')->inRandomOrder()->get();
         $companies = Companies::query()->orderBy('id')->get();
 
         if ($agentUsers->isEmpty() || $companies->isEmpty()) {
@@ -19,29 +19,50 @@ class AgentSeeder extends Seeder
             return;
         }
 
-        $perCompany = $companies->count();
+        $totalAgents = $agentUsers->count();
+        $companyCount = $companies->count();
 
-        foreach ($agentUsers as $i => $user) {
-            $company = $companies->get($i % $perCompany);
+        // Distribute agents: 12-16 per company, total = $totalAgents
+        $sizes = [];
+        $remaining = $totalAgents;
+        for ($i = 0; $i < $companyCount; $i++) {
+            $isLast = $i === $companyCount - 1;
+            $min = max(12, $remaining - ($companyCount - $i - 1) * 16);
+            $max = min(16, $remaining - ($companyCount - $i - 1) * 12);
+            $size = $isLast ? $remaining : fake()->numberBetween($min, $max);
+            $sizes[] = $size;
+            $remaining -= $size;
+        }
+        shuffle($sizes);
 
-            Agent::query()->updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'companies_id' => $company->id,
-                    'profile_image' => null,
-                    'views' => fake()->numberBetween(5, 200),
-                    'shares' => fake()->numberBetween(0, 30),
-                    'trust_score' => 0,
-                ],
-            );
+        $offset = 0;
+        foreach ($companies as $ci => $company) {
+            $count = $sizes[$ci];
 
-            // Add social link for each agent
-            if ($i === 0) {
-                $user->socialLinks()->updateOrCreate(
-                    ['platform' => 'linkedin'],
-                    ['url' => 'https://linkedin.com/in/rami-saleh-agent'],
+            for ($j = 0; $j < $count; $j++) {
+                $user = $agentUsers->get($offset + $j);
+                if (!$user) break;
+
+                Agent::query()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'companies_id' => $company->id,
+                        'profile_image' => null,
+                        'views' => fake()->numberBetween(5, 300),
+                        'shares' => fake()->numberBetween(0, 50),
+                        'trust_score' => 0,
+                    ],
                 );
+
+                if ($j < 3) {
+                    $user->socialLinks()->updateOrCreate(
+                        ['platform' => fake()->randomElement(['linkedin', 'facebook', 'twitter'])],
+                        ['url' => 'https://' . fake()->domainName()],
+                    );
+                }
             }
+
+            $offset += $count;
         }
     }
 }

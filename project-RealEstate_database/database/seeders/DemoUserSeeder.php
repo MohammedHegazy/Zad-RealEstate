@@ -19,59 +19,30 @@ class DemoUserSeeder extends Seeder
         $this->created['companies'] = [];
         $this->created['agents'] = [];
 
-        // 7 owners
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner@realestate.test',
-            username: 'property_owner',
-            fname: 'Omar',
-            lname: 'Haddad',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner2@realestate.test',
-            username: 'noor_estates',
-            fname: 'Noor',
-            lname: 'Al-Din',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner3@realestate.test',
-            username: 'ward_buildings',
-            fname: 'Ward',
-            lname: 'Jaber',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner4@realestate.test',
-            username: 'basel_invest',
-            fname: 'Basel',
-            lname: 'Khalaf',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner5@realestate.test',
-            username: 'diala_props',
-            fname: 'Diala',
-            lname: 'Mousa',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner6@realestate.test',
-            username: 'samer_realty',
-            fname: 'Samer',
-            lname: 'Ayoub',
-            type: 'owner',
-        );
-        $this->created['owners'][] = $this->upsertUser(
-            email: 'owner7@realestate.test',
-            username: 'lina_holdings',
-            fname: 'Lina',
-            lname: 'Sulaiman',
-            type: 'owner',
-        );
+        // 60 owners (7 known + 53 generated)
+        $knownOwners = [
+            ['owner@realestate.test', 'property_owner', 'Omar', 'Haddad'],
+            ['owner2@realestate.test', 'noor_estates', 'Noor', 'Al-Din'],
+            ['owner3@realestate.test', 'ward_buildings', 'Ward', 'Jaber'],
+            ['owner4@realestate.test', 'basel_invest', 'Basel', 'Khalaf'],
+            ['owner5@realestate.test', 'diala_props', 'Diala', 'Mousa'],
+            ['owner6@realestate.test', 'samer_realty', 'Samer', 'Ayoub'],
+            ['owner7@realestate.test', 'lina_holdings', 'Lina', 'Sulaiman'],
+        ];
+        foreach ($knownOwners as [$email, $username, $fname, $lname]) {
+            $this->created['owners'][] = $this->upsertUser(
+                email: $email, username: $username, fname: $fname, lname: $lname, type: 'owner',
+            );
+        }
+        for ($i = 8; $i <= 60; $i++) {
+            $this->created['owners'][] = $this->upsertUser(
+                email: "owner{$i}@realestate.test", username: fake()->unique()->userName(),
+                fname: fake()->firstName(), lname: fake()->lastName(), type: 'owner',
+            );
+        }
 
-        // 6 buyers/investors
-        $buyerEmails = [
+        // 120 buyers/investors (6 known + 114 generated)
+        $knownBuyers = [
             ['buyer@realestate.test', 'investor_buyer', 'Layla', 'Khalil'],
             ['buyer2@realestate.test', 'hisham_invest', 'Hisham', 'Qassem'],
             ['buyer3@realestate.test', 'ranim_capital', 'Ranim', 'Fares'],
@@ -79,48 +50,39 @@ class DemoUserSeeder extends Seeder
             ['buyer5@realestate.test', 'mariam_trust', 'Mariam', 'Akkad'],
             ['buyer6@realestate.test', 'tamer_group', 'Tamer', 'Rashid'],
         ];
-        foreach ($buyerEmails as [$email, $username, $fname, $lname]) {
+        foreach ($knownBuyers as [$email, $username, $fname, $lname]) {
             $this->created['buyers'][] = $this->upsertUser(
-                email: $email,
-                username: $username,
-                fname: $fname,
-                lname: $lname,
-                type: 'buyer',
+                email: $email, username: $username, fname: $fname, lname: $lname, type: 'buyer',
+            );
+        }
+        for ($i = 7; $i <= 120; $i++) {
+            $this->created['buyers'][] = $this->upsertUser(
+                email: "buyer{$i}@realestate.test", username: fake()->unique()->userName(),
+                fname: fake()->firstName(), lname: fake()->lastName(), type: 'buyer',
             );
         }
 
-        // 4 company-owners
-        $this->created['companies'][] = $this->upsertUser(
-            email: 'company@realestate.test',
-            username: 'acme_realty',
-            fname: 'Samir',
-            lname: 'Nasser',
-            type: 'company',
-        );
-        $this->created['companies'][] = $this->upsertUser(
-            email: 'company2@realestate.test',
-            username: 'sham_holdings',
-            fname: 'Fadi',
-            lname: 'Mardini',
-            type: 'company',
-        );
-        $this->created['companies'][] = $this->upsertUser(
-            email: 'company3@realestate.test',
-            username: 'levant_props',
-            fname: 'Rana',
-            lname: 'Kattan',
-            type: 'company',
-        );
-        $this->created['companies'][] = $this->upsertUser(
-            email: 'company4@realestate.test',
-            username: 'orient_group',
-            fname: 'Maher',
-            lname: 'Barakat',
-            type: 'company',
-        );
+        // 8 company-owners (4 known + 4 generated)
+        $knownCompanies = [
+            ['company@realestate.test', 'acme_realty', 'Samir', 'Nasser'],
+            ['company2@realestate.test', 'sham_holdings', 'Fadi', 'Mardini'],
+            ['company3@realestate.test', 'levant_props', 'Rana', 'Kattan'],
+            ['company4@realestate.test', 'orient_group', 'Maher', 'Barakat'],
+        ];
+        foreach ($knownCompanies as [$email, $username, $fname, $lname]) {
+            $this->created['companies'][] = $this->upsertUser(
+                email: $email, username: $username, fname: $fname, lname: $lname, type: 'company',
+            );
+        }
+        for ($i = 5; $i <= 8; $i++) {
+            $this->created['companies'][] = $this->upsertUser(
+                email: "company{$i}@realestate.test", username: fake()->unique()->userName(),
+                fname: fake()->firstName(), lname: fake()->lastName(), type: 'company',
+            );
+        }
 
-        // 20 agents (keep existing Rami Saleh + 19 new)
-        $agentUsers = [
+        // 112 agents (~14 per company, keeping existing Rami Saleh as agent 1)
+        $knownAgents = [
             ['agent@realestate.test', 'field_agent', 'Rami', 'Saleh'],
             ['agent2@realestate.test', 'sara_realty', 'Sara', 'Al-Ali'],
             ['agent3@realestate.test', 'khaled_agent', 'Khaled', 'Suleiman'],
@@ -142,13 +104,17 @@ class DemoUserSeeder extends Seeder
             ['agent19@realestate.test', 'bassam_homes', 'Bassam', 'Karam'],
             ['agent20@realestate.test', 'manal_group', 'Manal', 'Azar'],
         ];
-        foreach ($agentUsers as [$email, $username, $fname, $lname]) {
+        foreach ($knownAgents as [$email, $username, $fname, $lname]) {
             $this->created['agents'][] = $this->upsertUser(
-                email: $email,
-                username: $username,
-                fname: $fname,
-                lname: $lname,
-                type: 'agent',
+                email: $email, username: $username, fname: $fname, lname: $lname, type: 'agent',
+            );
+        }
+
+        // 92 more agents (21-112)
+        for ($i = 21; $i <= 112; $i++) {
+            $this->created['agents'][] = $this->upsertUser(
+                email: "agent{$i}@realestate.test", username: fake()->unique()->userName(),
+                fname: fake()->firstName(), lname: fake()->lastName(), type: 'agent',
             );
         }
     }
