@@ -84,7 +84,7 @@
    * ------------------------------------------------------------------------- */
   --color-text-primary: var(--navy-900);
   --color-text-secondary: var(--black-500);
-  --color-text-muted: var(--black-400);
+  --color-text-muted: var(--black-800);
   --color-text-disabled: var(--black-300);
   --color-text-inverse: var(--white);
   --color-text-accent: var(--orange-500);
@@ -187,7 +187,7 @@
   /* Text — proper contrast for dark backgrounds */
   --color-text-primary: var(--white);
   --color-text-secondary: var(--black-200);
-  --color-text-muted: var(--black-300);
+  --color-text-muted: var(--white);
   --color-text-disabled: var(--black-500);
   --color-text-inverse: var(--navy-900);
   --color-text-accent: var(--orange-400);

@@ -66,3 +66,20 @@ button {
   outline: 2px solid var(--color-border-focus);
   outline-offset: 2px;
 }
+
+/* Bootstrap overrides */
+.text-muted {
+  --bs-text-opacity: 1;
+  color: var(--color-text-muted) !important;
+}
+
+.btn-outline {
+  --bs-btn-color: var(--color-text-primary);
+  --bs-btn-border-color: var(--color-text-primary);
+  --bs-btn-hover-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-subtle);
+  --bs-btn-hover-border-color: var(--color-primary);
+  --bs-btn-active-color: var(--color-primary);
+  --bs-btn-active-bg: var(--color-primary-subtle);
+  --bs-btn-active-border-color: var(--color-primary);
+}

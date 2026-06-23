@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import AdminPageHeader from '@/components/admin/AdminPageHeader.vue'
 import AdminStatCard from '@/components/admin/AdminStatCard.vue'
 import AdminStatsSection from '@/components/admin/AdminStatsSection.vue'
+import AppButton from '@/components/ui/AppButton.vue'
 import ErrorAlert from '@/components/ui/ErrorAlert.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import { agentService } from '@/api/agent.js'
@@ -35,10 +36,10 @@ onMounted(fetchProfile)
       description="نظرة عامة على ملفك الشخصي وإحصائياتك."
     >
       <template #actions>
-        <button type="button" class="btn btn-outline btn-sm" @click="fetchProfile">
+        <AppButton variant="outline" size="sm" @click="fetchProfile">
           <i class="bi bi-arrow-clockwise"></i>
           تحديث
-        </button>
+        </AppButton>
       </template>
     </AdminPageHeader>
 
@@ -106,18 +107,18 @@ onMounted(fetchProfile)
       </AdminStatsSection>
 
       <div class="d-flex gap-2 mt-4 flex-wrap">
-        <RouterLink to="/agent/profile" class="btn btn-primary btn-sm">
+        <AppButton variant="primary" size="sm" to="/agent/profile">
           <i class="bi bi-pencil"></i>
           تعديل الملف الشخصي
-        </RouterLink>
-        <RouterLink to="/agent/estates" class="btn btn-outline btn-sm">
+        </AppButton>
+        <AppButton variant="outline" size="sm" to="/agent/estates">
           <i class="bi bi-buildings"></i>
           العقارات
-        </RouterLink>
-        <RouterLink to="/agent/social-links" class="btn btn-outline btn-sm">
+        </AppButton>
+        <AppButton variant="outline" size="sm" to="/agent/social-links">
           <i class="bi bi-share"></i>
           روابط التواصل
-        </RouterLink>
+        </AppButton>
       </div>
     </template>
   </div>

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             AgentSeeder::class,
             EstateSeeder::class,
+            EstateMediaSeeder::class,
             ReviewSeeder::class,
             PortfolioSeeder::class,
         ]);

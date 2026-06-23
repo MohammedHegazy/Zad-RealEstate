@@ -101,6 +101,14 @@ const userName = computed(() => {
               <i class="bi bi-speedometer2"></i>
               لوحة التحكم
             </AppButton>
+            <AppButton v-else-if="auth.isCompany()" variant="ghost" size="sm" to="/company/dashboard">
+              <i class="bi bi-speedometer2"></i>
+              لوحة الشركة
+            </AppButton>
+            <AppButton v-else-if="auth.isAgent()" variant="ghost" size="sm" to="/agent/dashboard">
+              <i class="bi bi-speedometer2"></i>
+              لوحة الوسيط
+            </AppButton>
             <AppButton v-else-if="auth.isRegularUser()" variant="ghost" size="sm" to="/buyer/dashboard">
               <i class="bi bi-speedometer2"></i>
               لوحة المستثمر
