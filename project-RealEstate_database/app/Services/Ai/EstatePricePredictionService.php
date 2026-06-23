@@ -139,11 +139,33 @@ class EstatePricePredictionService
 
         $field = config('ml.price_prediction.location_field', 'city');
 
-        if ($field === 'place') {
-            return (string) $place->name;
-        }
+        $label = $field === 'place'
+            ? (string) $place->name
+            : (string) ($place->city?->name ?? $place->name);
 
-        return (string) ($place->city?->name ?? $place->name);
+        return $this->translateCityToEnglish($label);
+    }
+
+    private function translateCityToEnglish(string $arabic): string
+    {
+        $map = [
+            'دمشق'       => 'Damascus',
+            'حلب'         => 'Aleppo',
+            'حمص'         => 'Homs',
+            'اللاذقية'   => 'Latakia',
+            'حماة'        => 'Hama',
+            'الرقة'       => 'Raqqa',
+            'دير الزور'  => 'Deir ez-Zor',
+            'الحسكة'     => 'Hasakah',
+            'درعا'        => 'Daraa',
+            'السويداء'   => 'Sweida',
+            'طرطوس'      => 'Tartus',
+            'إدلب'        => 'Idlib',
+            'القنيطرة'   => 'Quneitra',
+            'ريف دمشق'   => 'Rif Damascus',
+        ];
+
+        return $map[$arabic] ?? $arabic;
     }
 
     /**
