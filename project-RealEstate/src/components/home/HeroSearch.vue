@@ -16,8 +16,8 @@ const listingType = ref('')
 
 const propertyTypes = [
   { value: '', label: 'كل الأنواع' },
-  { value: 'residential', label: 'سكني' },
-  { value: 'commercial', label: 'تجاري' },
+  { value: 'سكني', label: 'سكني' },
+  { value: 'تجاري', label: 'تجاري' },
 ]
 
 const listingTypes = [

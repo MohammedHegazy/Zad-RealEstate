@@ -8,15 +8,22 @@ export const ESTATE_SORT_OPTIONS = [
 
 export const ESTATE_TYPE_OPTIONS = [
   { value: '', label: 'كل الفئات' },
-  { value: 'residential', label: 'سكني' },
-  { value: 'commercial', label: 'تجاري' },
+  { value: 'سكني', label: 'سكني' },
+  { value: 'تجاري', label: 'تجاري' },
 ]
 
 export const ESTATE_KIND_OPTIONS = [
   { value: '', label: 'كل الأنواع' },
-  { value: 'apartment', label: 'شقة' },
-  { value: 'villa', label: 'فيلا' },
-  { value: 'office', label: 'مكتب' },
+  { value: 'شقة', label: 'شقة' },
+  { value: 'فيلا', label: 'فيلا' },
+  { value: 'دوبلكس', label: 'دوبلكس' },
+  { value: 'تاون هاوس', label: 'تاون هاوس' },
+  { value: 'استوديو', label: 'استوديو' },
+  { value: 'مكتب', label: 'مكتب' },
+  { value: 'متجر', label: 'متجر' },
+  { value: 'مستودع', label: 'مستودع' },
+  { value: 'عمارة', label: 'عمارة' },
+  { value: 'مركز تجاري', label: 'مركز تجاري' },
 ]
 
 export const LISTING_TYPE_OPTIONS = [

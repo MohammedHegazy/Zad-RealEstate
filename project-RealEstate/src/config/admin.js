@@ -74,14 +74,21 @@ export const ESTATE_RENT_KIND_OPTIONS = [
 ]
 
 export const ADMIN_ESTATE_TYPE_OPTIONS = [
-  { value: 'residential', label: 'سكني' },
-  { value: 'commercial', label: 'تجاري' },
+  { value: 'سكني', label: 'سكني' },
+  { value: 'تجاري', label: 'تجاري' },
 ]
 
 export const ADMIN_ESTATE_KIND_OPTIONS = [
-  { value: 'apartment', label: 'شقة' },
-  { value: 'villa', label: 'فيلا' },
-  { value: 'office', label: 'مكتب' },
+  { value: 'شقة', label: 'شقة' },
+  { value: 'فيلا', label: 'فيلا' },
+  { value: 'دوبلكس', label: 'دوبلكس' },
+  { value: 'تاون هاوس', label: 'تاون هاوس' },
+  { value: 'استوديو', label: 'استوديو' },
+  { value: 'مكتب', label: 'مكتب' },
+  { value: 'متجر', label: 'متجر' },
+  { value: 'مستودع', label: 'مستودع' },
+  { value: 'عمارة', label: 'عمارة' },
+  { value: 'مركز تجاري', label: 'مركز تجاري' },
 ]
 
 export const COMPANY_STATUS_LABELS = {

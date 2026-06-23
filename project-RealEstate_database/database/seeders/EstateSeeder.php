@@ -21,14 +21,9 @@ class EstateSeeder extends Seeder
 
         $ownerCount = $owners->count();
 
-        $namePrefixes = [
-            'residential' => ['شقة', 'فيلا', 'دوبلكس', 'تاون هاوس', 'استوديو'],
-            'commercial' => ['مكتب', 'متجر', 'مستودع', 'عمارة', 'مركز تجاري'],
-        ];
-
         $kindByType = [
-            'residential' => ['apartment', 'villa', 'duplex', 'townhouse', 'studio'],
-            'commercial' => ['office', 'shop', 'warehouse', 'building', 'mall'],
+            'سكني' => ['شقة', 'فيلا', 'دوبلكس', 'تاون هاوس', 'استوديو'],
+            'تجاري' => ['مكتب', 'متجر', 'مستودع', 'عمارة', 'مركز تجاري'],
         ];
 
         $statuses = ['active', 'active', 'active', 'active', 'pending', 'pending', 'rejected'];
@@ -41,17 +36,16 @@ class EstateSeeder extends Seeder
             for ($e = 0; $e < $estateCount; $e++) {
                 $owner = $owners->get($index % $ownerCount);
 
-                $typeText = fake()->randomElement(['residential', 'commercial', 'residential', 'residential']);
+                $typeText = fake()->randomElement(['سكني', 'تجاري', 'سكني', 'سكني']);
                 $kindIndex = fake()->numberBetween(0, 4);
                 $kindText = $kindByType[$typeText][$kindIndex];
-                $namePrefix = $namePrefixes[$typeText][$kindIndex];
 
-                $space = fake()->randomFloat(2, $typeText === 'residential' ? 60 : 30, $typeText === 'residential' ? 500 : 300);
-                $pricePerMeter = fake()->randomFloat(2, 200, ($typeText === 'residential' ? 4000 : 3000));
+                $space = fake()->randomFloat(2, $typeText === 'سكني' ? 60 : 30, $typeText === 'سكني' ? 500 : 300);
+                $pricePerMeter = fake()->randomFloat(2, 200, ($typeText === 'سكني' ? 4000 : 3000));
                 $price = round($space * $pricePerMeter, 2);
-                $monthlyRent = $kindText === 'warehouse' || $kindText === 'land'
+                $monthlyRent = $kindText === 'مستودع' || $kindText === 'أرض'
                     ? null
-                    : fake()->optional($typeText === 'residential' ? 0.6 : 0.5)->randomFloat(2, 150, 5000);
+                    : fake()->optional($typeText === 'سكني' ? 0.6 : 0.5)->randomFloat(2, 150, 5000);
                 $annualIncome = $monthlyRent !== null ? round($monthlyRent * 12 * 0.95, 2) : null;
                 $roi = $annualIncome !== null && $price > 0 ? round($annualIncome / $price, 4) : null;
                 $payback = $roi !== null && $roi > 0 ? round(1 / $roi, 2) : null;
@@ -59,7 +53,7 @@ class EstateSeeder extends Seeder
                 $latOffset = fake()->randomFloat(6, -0.01, 0.01);
                 $lngOffset = fake()->randomFloat(6, -0.01, 0.01);
 
-                $estateName = $namePrefix . ' ' . $place->name . ' ' . ($e + 1);
+                $estateName = $kindText . ' ' . $place->name . ' ' . ($e + 1);
 
                 $status = fake()->randomElement($statuses);
 
@@ -87,17 +81,17 @@ class EstateSeeder extends Seeder
                         'expected_annual_income' => $annualIncome,
                         'roi' => $roi,
                         'payback_period' => $payback,
-                        'floor' => $typeText === 'residential' ? fake()->numberBetween(1, 12) : fake()->numberBetween(1, 5),
-                        'num_of_bedrooms' => $typeText === 'residential' ? fake()->numberBetween(1, 6) : 0,
-                        'num_of_livingrooms' => $typeText === 'residential' ? fake()->numberBetween(1, 2) : 0,
-                        'num_of_receptions' => $typeText === 'residential' ? fake()->numberBetween(1, 2) : 1,
+                        'floor' => $typeText === 'سكني' ? fake()->numberBetween(1, 12) : fake()->numberBetween(1, 5),
+                        'num_of_bedrooms' => $typeText === 'سكني' ? fake()->numberBetween(1, 6) : 0,
+                        'num_of_livingrooms' => $typeText === 'سكني' ? fake()->numberBetween(1, 2) : 0,
+                        'num_of_receptions' => $typeText === 'سكني' ? fake()->numberBetween(1, 2) : 1,
                         'num_of_bathrooms' => fake()->numberBetween(1, 4),
-                        'num_of_kitchens' => $typeText === 'residential' ? fake()->numberBetween(1, 2) : 1,
-                        'num_of_balconies' => $typeText === 'residential' ? fake()->numberBetween(0, 3) : 0,
+                        'num_of_kitchens' => $typeText === 'سكني' ? fake()->numberBetween(1, 2) : 1,
+                        'num_of_balconies' => $typeText === 'سكني' ? fake()->numberBetween(0, 3) : 0,
                         'status' => $status,
                         'type_text' => $typeText,
                         'kind_text' => $kindText,
-                        'is_furnished' => $typeText === 'residential' && fake()->boolean(30),
+                        'is_furnished' => $typeText === 'سكني' && fake()->boolean(30),
                         'description' => $this->generateDescription($typeText, $kindText, $place->city->name, $place->name),
                         'date_of_build' => (string) fake()->numberBetween(1995, 2024),
                         'state_of_build' => fake()->randomElement(['excellent', 'good', 'fair', 'needs_renovation']),
@@ -116,7 +110,7 @@ class EstateSeeder extends Seeder
     private function generateDescription(string $type, string $kind, string $city, string $place): string
     {
         $templates = [
-            $type === 'residential'
+            $type === 'سكني'
                 ? "{$kind} مميزة في {$place} بدمشق، مساحة واسعة مع إطلالة رائعة. قريبة من جميع الخدمات والمواصلات."
                 : "{$kind} تجاري في {$place} بدمشق، موقع استراتيجي مناسب للمشاريع التجارية والاستثمار.",
             "عقار {$type} في {$place} - {$city}، تشطيب حديث مع خدمة المصعد. يتميز بقربه من المدارس والأسواق.",

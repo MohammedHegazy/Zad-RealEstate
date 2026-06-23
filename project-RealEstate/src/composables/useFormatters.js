@@ -23,17 +23,8 @@ export function formatArea(value) {
  * Translate common property type labels for display.
  */
 export function formatPropertyType(type) {
-  const labels = {
-    residential: 'سكني',
-    commercial: 'تجاري',
-    apartment: 'شقة',
-    villa: 'فيلا',
-    office: 'مكتب',
-    land: 'أرض',
-    shop: 'محل',
-  }
-
-  return labels[type] ?? type
+  if (!type) return type
+  return type
 }
 
 /**
