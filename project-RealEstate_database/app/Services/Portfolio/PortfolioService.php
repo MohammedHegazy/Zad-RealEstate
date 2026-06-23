@@ -30,7 +30,7 @@ class PortfolioService
 {
     /** Allowed status transitions (terminal states have no outgoing edges). */
     private const STATUS_TRANSITIONS = [
-        PortfolioProperty::STATUS_TRACKING => [PortfolioProperty::STATUS_INVESTED],
+        PortfolioProperty::STATUS_TRACKING => [PortfolioProperty::STATUS_INVESTED, PortfolioProperty::STATUS_SOLD],
         PortfolioProperty::STATUS_INVESTED => [PortfolioProperty::STATUS_SOLD],
         PortfolioProperty::STATUS_SOLD => [],
     ];

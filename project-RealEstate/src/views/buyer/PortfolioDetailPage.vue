@@ -179,25 +179,18 @@ onMounted(fetchPortfolio)
               </div>
               <TableActionGroup>
                 <TableAction
-                  v-if="!item.global_taken && item.status !== 'invested'"
+                  v-if="!item.global_taken && item.status === 'tracking'"
                   tone="success"
                   icon="bi-check-circle"
                   label="مستثمر"
                   @click="updateItemStatus(item.id, 'invested')"
                 />
                 <TableAction
-                  v-if="!item.global_taken && item.status !== 'sold'"
+                  v-if="!item.global_taken && (item.status === 'tracking' || item.status === 'invested')"
                   tone="warning"
                   icon="bi-cash-coin"
                   label="مباع"
                   @click="updateItemStatus(item.id, 'sold')"
-                />
-                <TableAction
-                  v-if="!item.global_taken && item.status !== 'tracking'"
-                  tone="neutral"
-                  icon="bi-arrow-counterclockwise"
-                  label="قيد التتبّع"
-                  @click="updateItemStatus(item.id, 'tracking')"
                 />
                 <TableAction
                   tone="danger"

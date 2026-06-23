@@ -144,7 +144,7 @@ const portfolioStatusBadge = computed(() => {
   if (!ps) return null
   if (ps === 'tracking') return { text: 'قيد التتبّع في محفظتك', variant: 'secondary' }
   if (ps === 'invested') return { text: 'مستثمر في محفظتك', variant: 'success' }
-  if (ps === 'sold') return { text: 'مباع في محفظتك', variant: 'warning' }
+  if (ps === 'sold') return { text: 'مباع في محفظتك', variant: 'danger' }
   return null
 })
 

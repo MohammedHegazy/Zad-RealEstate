@@ -27,3 +27,13 @@
   background-color: var(--color-success-bg);
   color: var(--color-success);
 }
+
+.app-badge--secondary {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.app-badge--danger {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}

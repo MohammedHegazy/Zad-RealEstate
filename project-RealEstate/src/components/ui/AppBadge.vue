@@ -3,7 +3,7 @@ defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (v) => ['default', 'primary', 'dark', 'success'].includes(v),
+    validator: (v) => ['default', 'primary', 'dark', 'success', 'secondary', 'danger'].includes(v),
   },
 })
 </script>
