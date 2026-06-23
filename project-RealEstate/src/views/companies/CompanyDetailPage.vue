@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AgentCard from '@/components/cards/AgentCard.vue'
+import Pagination from '@/components/ui/Pagination.vue'
 import ReviewSection from '@/components/reviews/ReviewSection.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 import CtaBanner from '@/components/ui/CtaBanner.vue'
@@ -18,6 +19,9 @@ const loading = ref(false)
 const error = ref(null)
 const company = ref(null)
 const agents = ref([])
+const agentsLoading = ref(false)
+const agentsPagination = ref(null)
+const agentsPage = ref(1)
 const reviews = ref([])
 const reviewSummary = ref(null)
 const trust = ref(null)
@@ -33,13 +37,32 @@ async function fetchCompany(id) {
   try {
     const { data } = await companiesService.getById(id)
     company.value = data
-    agents.value = data.agents ?? []
+    await fetchAgents(id)
     await fetchReviews(id)
   } catch (err) {
     error.value = getErrorMessage(err, 'تعذّر تحميل الشركة.')
   } finally {
     loading.value = false
   }
+}
+
+async function fetchAgents(id) {
+  agentsLoading.value = true
+  try {
+    const { data, pagination } = await companiesService.agents(id, { page: agentsPage.value, per_page: 6 })
+    agents.value = data ?? []
+    agentsPagination.value = pagination ?? null
+  } catch {
+    agents.value = []
+    agentsPagination.value = null
+  } finally {
+    agentsLoading.value = false
+  }
+}
+
+function goToAgentsPage(page) {
+  agentsPage.value = page
+  fetchAgents(route.params.id)
 }
 
 async function fetchReviews(id) {
@@ -62,7 +85,12 @@ async function fetchReviews(id) {
 }
 
 onMounted(() => fetchCompany(route.params.id))
-watch(() => route.params.id, (id) => id && fetchCompany(id))
+watch(() => route.params.id, (id) => {
+  if (id) {
+    agentsPage.value = 1
+    fetchCompany(id)
+  }
+})
 </script>
 
 <template>
@@ -111,11 +139,21 @@ watch(() => route.params.id, (id) => id && fetchCompany(id))
 
         <section v-if="agents.length" class="directory-section">
           <h2>فريق الوسطاء</h2>
-          <div class="row g-4">
-            <div v-for="agent in agents" :key="agent.id" class="col-sm-6 col-lg-4">
-              <AgentCard :agent="agent" />
+          <LoadingSpinner v-if="agentsLoading" />
+          <template v-else>
+            <div class="row g-4">
+              <div v-for="agent in agents" :key="agent.id" class="col-sm-6 col-lg-4">
+                <AgentCard :agent="agent" />
+              </div>
             </div>
-          </div>
+            <Pagination
+              v-if="agentsPagination"
+              :current-page="agentsPagination.current_page"
+              :last-page="agentsPagination.last_page"
+              :total="agentsPagination.total"
+              @page-change="goToAgentsPage"
+            />
+          </template>
         </section>
 
         <ReviewSection

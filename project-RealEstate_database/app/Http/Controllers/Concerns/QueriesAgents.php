@@ -11,7 +11,7 @@ trait QueriesAgents
     protected function agentsQuery(Request $request): Builder
     {
         $query = Agent::query()
-            ->with(['user:id,username,fname,lname,email,phone,type', 'company:id,company_name,places_id'])
+            ->with(['user:id,username,fname,lname,email,phone,country_code_phone,type', 'company:id,company_name,places_id'])
             ->withAvg('approvedReviews', 'rating')
             ->withCount('approvedReviews');
 
